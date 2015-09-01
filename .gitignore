@@ -56,3 +56,6 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+/.dist-buildwrapper/
+Setup.hs
+Software-Testing-ft3.cabal
