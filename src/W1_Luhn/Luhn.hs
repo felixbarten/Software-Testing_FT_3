@@ -1,4 +1,4 @@
-module Luhn where
+module W1_Luhn.Luhn where
 
 {- 
 Eigen implementatie van Luhn mod 10 
