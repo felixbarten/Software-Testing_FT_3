@@ -1,11 +1,16 @@
 module W1_Euler_bonus.Euler where
 
+import Data.List
 
 
 --- Project Euler exercise 9
 
+pythagoreanTriplet :: [(Integer, Integer, Integer)]
+pythagoreanTriplet = [(a,  b,  c) | a <- [1..500], b <- [2..500], c <- [1..1000], a + b + c == 1000, a^2 + b^2 == c^2, a<b, b<c]
+-- ^ will run for a loong time
 
-
+productOf :: Integer
+productOf = foldr (\(x,y,z) acc -> product [x,y,z] ) 0 pythagoreanTriplet
 
 --- Project Euler exercise 10
 
