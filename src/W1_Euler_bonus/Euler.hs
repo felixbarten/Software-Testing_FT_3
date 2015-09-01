@@ -22,4 +22,41 @@ sumOfPrimes = sum (takeWhile (< 2000000) primes)
 -- Project Euler exercise 49
 
 fourDigitPrimes :: [Integer]
-fourDigitPrimes = dropWhile (<999) (takeWhile (<10000) primes)
+fourDigitPrimes = dropWhile (<=1488) (takeWhile (<10000) primes)
+-- ^ set lowerbound to 1488 to prevent returning (1487,4817,8147)
+
+getPermutations :: [Integer] -> [Integer] -> (Integer,Integer,Integer)
+getPermutations [] _ = (0,0,0)
+getPermutations (x:xs) ys = if result == (0,0,0) then getPermutations xs ys else result 
+    where result =  permutation x ys 
+    
+permutation :: Integer -> [Integer] -> (Integer, Integer, Integer)
+permutation _ [] = (0,0,0)
+permutation x (y:ys) = if x /= y && prime (y + (y - x)) && isPermutation x y (y + y - x)
+  then (x, y, y + y - x) else permutation x ys
+
+intToList :: Integer -> [Integer]
+intToList = map (read . return) . show
+
+{-
+isPermutation :: Integer -> Integer -> Integer -> Bool
+isPermutation x y z = (sort ( intToList x) == sort  (intToList y)) && (sort ( intToList y) == sort (intToList z)) && (sort ( intToList x) == sort ( intToList z))
+-- ^ dirty implementation
+-}
+
+isPermutation :: Integer -> Integer -> Integer -> Bool
+isPermutation x y z = intToList x `elem` ps && intToList y `elem` ps && intToList z `elem` ps
+    where ps = permutations $ intToList x
+-- ^ cleaner method
+
+joinints :: [Integer] -> Integer
+joinints = read . concatMap show
+
+concatInts :: (Integer, Integer, Integer) -> Integer
+concatInts (x, y, z) = joinints [x,y,z]
+
+getPrimePermutations :: (Integer, Integer, Integer)
+getPrimePermutations = getPermutations fourDigitPrimes fourDigitPrimes
+
+getConcatPermutation :: Integer
+getConcatPermutation = concatInts getPrimePermutations
