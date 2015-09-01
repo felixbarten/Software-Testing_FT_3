@@ -36,8 +36,7 @@ doubleEveryOther (x:y:xs) = [x, y *2] ++ doubleEveryOther xs
 
 -- Calculate the sum of all the digits in every Integer.
 sumDigits :: [Integer] -> Integer
-sumDigits [] = 0
-sumDigits (x:xs) = sum (digitToList x) + sumDigits xs
+sumDigits xs = foldr ((+) . sum . digitToList) 0 xs
 
 
 -- Exercise 5 -----------------------------------------
