@@ -1,6 +1,8 @@
 {-# OPTIONS_GHC -Wall #-}
 module HW01 where
 
+import Debug.Trace
+
 -- Exercise 1 -----------------------------------------
 
 -- Get the last digit from a number
@@ -14,7 +16,7 @@ dropLastDigit x = x `div` 10
 -- Exercise 2 -----------------------------------------
 
 toRevDigits :: Integer -> [Integer]
-toRevDigits x = if x <= 0 then [] else toRevDigits(dropLastDigit x) ++ [lastDigit x]
+toRevDigits x = if x <= 0 then [] else  [lastDigit x] ++ toRevDigits(dropLastDigit x)
 
 -- Exercise 3 -----------------------------------------
 
@@ -23,18 +25,20 @@ doubleEveryOther :: [Integer] -> [Integer]
 doubleEveryOther [] = []
 doubleEveryOther (x:xs) = x : (2* head xs) : doubleEveryOther(tail xs)
 
+makeProducts :: [Integer] -> [Integer]
+makeProducts [] = []
+makeProducts (x:xs) = if x > 9 then (lastDigit x + dropLastDigit x):makeProducts xs else x: makeProducts xs
 -- Exercise 4 -----------------------------------------
 
 -- Calculate the sum of all the digits in every Integer.
 sumDigits :: [Integer] -> Integer
-sumDigits = undefined
-
+sumDigits x = foldr (+) 0 x
 
 -- Exercise 5 -----------------------------------------
 
 -- Validate a credit card number using the above functions.
 luhn :: Integer -> Bool
-luhn = undefined
+luhn x = sumDigits(makeProducts(doubleEveryOther (toRevDigits x))) `mod` 10 == 0
 
 -- Exercise 6 -----------------------------------------
 
