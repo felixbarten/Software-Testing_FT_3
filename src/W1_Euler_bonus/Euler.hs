@@ -11,11 +11,23 @@ pythagoreanTriplet :: [(Integer, Integer, Integer)]
 pythagoreanTriplet = [(a,  b,  c) | a <- [1..500], b <- [2..500], c <- [1..1000], a + b + c == 1000, a^2 + b^2 == c^2, a<b && b<c]
 -}
 
-pythagoreanTriplet :: [(Integer, Integer, Integer)]
-pythagoreanTriplet =  [(a,  b,  c) | j <- [2..500], i <- [1..(j-1)], let a = i, let b = j, let c = j + i, a + b + c == 1000, a^2 + b^2 == c^2, a<b && b<c]
+{-
+pythagoreanTriplet :: [[Integer]]
+pythagoreanTriplet =  [[a,  b,  c] | j <- [2..500], i <- [1..(j-1)], let a = i, let b = j, let c = a + b, a^2 + b^2 == c^2]
+-}
+
+pythagoreanTriplet :: [(Integer, Integer, Integer)] 
+pythagoreanTriplet =  [(a,  b,  c) | j <- [2..500],
+                                     i <- [1..(j-1)],
+                                      let a = i,
+                                      let b = j, 
+                                      let c = 1000 - (a + b), 
+                                      a + b + c == 1000,
+                                      a^2 + b^2 == c^2]
 
 euler_problem_9 :: Integer
 euler_problem_9 = foldr (\(x,y,z) _ -> product [x,y,z] ) 0 pythagoreanTriplet
+
 
 --- Project Euler exercise 10
 
