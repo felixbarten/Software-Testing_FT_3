@@ -1,4 +1,4 @@
-module W1_Euler_bonus.Euler where
+module Euler where
 
 import Data.List
 

@@ -42,31 +42,31 @@ ex1Tests = [ Test "lastDigit test" testLastDigit
 
 ex2Tests :: [Test]
 ex2Tests = [Test "toRevDigits test" testToRevDigist
-				[(123, [3,2,1]),(321,[1,2,3])]
-				]
+                                [(123, [3,2,1]),(321,[1,2,3])]
+                                ]
 
 -- Exercise 3 -----------------------------------------
 
 ex3Tests :: [Test]
 ex3Tests = [Test "doubleEveryOther test" testDoubleEveryOther
-				[([5,3,1,5],[5,6,1,10]), ([7,7,6,2],[7,14,6,4])]
-				, Test "makeProducts test" testMakeProducts
-				[([5,14,2,18],[5,5,2,9]), ([7,11,6,12],[7,2,6,3])]
-				]
+                                [([5,3,1,5],[5,6,1,10]), ([7,7,6,2],[7,14,6,4])]
+                                , Test "makeProducts test" testMakeProducts
+                                [([5,14,2,18],[5,5,2,9]), ([7,11,6,12],[7,2,6,3])]
+                                ]
 
 -- Exercise 4 -----------------------------------------
 
 ex4Tests :: [Test]
 ex4Tests = [Test "sumDigits test" testSumDigits
-				[([1,2,3,4], 10), ([2,3,1,5], 11)]
-				]
+                                [([1,2,3,4], 10), ([2,3,1,5], 11)]
+                                ]
 
 -- Exercise 5 -----------------------------------------
 
 ex5Tests :: [Test]
 ex5Tests = [Test "luhn test" testLuhn
-				[(5594589764218858, True), (1234567898765432, False), (4929825602520082, True)]
-				]
+                                [(5594589764218858, True), (1234567898765432, False), (4929825602520082, True)]
+                                ]
 
 -- Exercise 6 -----------------------------------------
 
