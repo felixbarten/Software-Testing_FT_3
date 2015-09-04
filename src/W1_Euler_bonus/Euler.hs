@@ -11,11 +11,6 @@ pythagoreanTriplet :: [(Integer, Integer, Integer)]
 pythagoreanTriplet = [(a,  b,  c) | a <- [1..500], b <- [2..500], c <- [1..1000], a + b + c == 1000, a^2 + b^2 == c^2, a<b && b<c]
 -}
 
-{-
-pythagoreanTriplet :: [[Integer]]
-pythagoreanTriplet =  [[a,  b,  c] | j <- [2..500], i <- [1..(j-1)], let a = i, let b = j, let c = a + b, a^2 + b^2 == c^2]
--}
-
 pythagoreanTriplet :: [(Integer, Integer, Integer)] 
 pythagoreanTriplet =  [(a,  b,  c) | j <- [2..500],
                                      i <- [1..(j-1)],
@@ -70,7 +65,6 @@ isPermutation x y z = (sort ( intToList x) == sort  (intToList y)) && (sort ( in
 isPermutation :: Integer -> Integer -> Integer -> Bool
 isPermutation x y z = intToList x `elem` ps && intToList y `elem` ps && intToList z `elem` ps
     where ps = permutations $ intToList x
--- ^ cleaner method
 
 joinints :: [Integer] -> Integer
 joinints = read . concatMap show
