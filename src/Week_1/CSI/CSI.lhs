@@ -49,11 +49,13 @@ If the puzzle is well-designed, then guilty should give a singleton list.
 > accusers n = filter (\x -> says x n) boys
 
 Any boy who hasn't accused himself(contradiction) is probably honest
+
 > honest :: [Boy]
 > honest = map (fst) $ filter (\(x,y) -> notElem x y ) (map (\z -> (z, accusers z)) boys)
 
 Three of the 5 boys always tell the truth so any person who is accused by more than 2 people(The amount of boys who always lie)
 must be guilty
+
 > guilty:: [Boy]
 > guilty = map (fst) (filter (\(x,y) -> length y > 2) (map (\y -> (y, accusers y)) boys))
 
