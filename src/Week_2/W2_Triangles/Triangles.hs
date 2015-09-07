@@ -1,12 +1,14 @@
 module Week_2.W2_Triangles.Triangles where
 
+import  Week_2.W2_Triangles.Testing
+
 data Shape = NoTriangle | Equilateral 
            | Isosceles  | Rectangular | Other deriving (Eq,Show)
 
 triangle :: Integer -> Integer -> Integer -> Shape
-triangle x y z | x == y && y == z = Equilateral
-               |(x == y || x ==z || y == z) && not ( x == y && x == z && y ==z) = Isosceles
-               | x^2 + y^2 == z^2 = Rectangular
+triangle x y z | isEquilateral x y z = Equilateral
+               | isIsosceles x y z  = Isosceles
+               | isRectangular x y z = Rectangular
                | isNoTriangle x y z = NoTriangle
                | isOther x y z = Other
                  
@@ -27,3 +29,41 @@ isOther x y z =  not (isEquilateral x y z) && not ( isIsosceles x y z ) && not  
 {- 
 solution written in about 30 minutes, had some trouble with conflicting definitions of triangle inequality 
 -}
+
+testRectangular, testIsosceles, testEquilateral, testNoTriangle, testIsOther :: (Integer, Integer,Integer, Shape) -> Bool
+
+testRectangular(x,y,z,shape) = triangle x y z == shape
+testIsosceles (x,y,z,shape) = triangle x y z == shape
+testEquilateral (x,y,z,shape) = triangle x y z == shape
+testNoTriangle (x,y,z,shape) = triangle x y z == shape
+testIsOther (x,y,z,shape) = triangle x y z == shape
+
+rectangularTests :: [Test]
+rectangularTests = [Test "Rectangular Tests" testIsOther [(200, 375, 425, Rectangular), (12, 5,13, Rectangular)]
+           ]
+
+isoscelesTests :: [Test]
+isoscelesTests = [Test "Isosceles Tests" testIsOther [(5, 5, 9, Isosceles), (5, 8,8, Isosceles)]
+           ]
+
+isNoTriangleTests :: [Test]
+isNoTriangleTests = [Test "NoTriangle Tests" testIsOther [(5, 3, 9, NoTriangle), (5, 3,8, NoTriangle)]
+           ]
+-- test for scalene triangles
+isOtherTests :: [Test]
+isOtherTests = [ Test "Other Tests" testIsOther [(13, 14, 9, Other), (15, 14,9, Other)]
+           ]
+
+equilateralTests :: [Test]
+equilateralTests = [Test "Rectangular Tests" testIsOther [(350, 350, 350, Equilateral), (12, 12,12, Equilateral)]
+           ]          
+           
+           -- All Tests ------------------------------------------
+
+allTests :: [Test]
+allTests = concat [ rectangularTests
+                  , equilateralTests
+                  , isoscelesTests
+                  , isNoTriangleTests
+                  , isOtherTests
+                  ]
