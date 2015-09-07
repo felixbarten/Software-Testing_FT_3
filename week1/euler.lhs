@@ -21,7 +21,7 @@ Find the product abc.
 
 Solution: 
 
-> getSolution =  filter (\(x,y,z) -> x + y + z == 1000) $ pythagoreanTriples 500
+> getSolution = map (\(x,y,z) -> x*y*z) $ filter (\(x,y,z) -> x + y + z == 1000) $ pythagoreanTriples 500
 
 
 Euler 10: Summation of primes
@@ -75,7 +75,7 @@ What 12-digit number do you form by concatenating the three terms in this sequen
 
  filter (\x -> filter (isLength3) x) . map (isPrimeTs) . map getAllPossiblePerm
 
-
+ 
 
 
 
