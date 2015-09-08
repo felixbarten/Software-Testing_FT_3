@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ExistentialQuantification #-}
-module  Week_2.W2_Triangles.Testing where
+module  Week_2.Testing where
 
 import Data.Maybe
 import Control.Arrow
