@@ -1,6 +1,5 @@
 module Week_2.W2_Permutations.Permutations where
 
--- is the 2nd one permutation of 1st one?
 
 isPermutation:: Eq a => [a] -> [a] -> Bool
 isPermutation [] [] = True
