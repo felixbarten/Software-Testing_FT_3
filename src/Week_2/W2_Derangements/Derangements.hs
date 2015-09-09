@@ -1,5 +1,14 @@
 module Week_2.W2_Derangements.Derangements where
 
+{-
+isDerangement :: Eq a => [a] -> [a] -> Bool
+isDerangement xs ys = deran xs == deran ys
+
+deran :: Eq a => [a] -> [[a]]
+deran xs =  filter (and . zipWith (/=) xs) $ permutations xs
+
+-}
+
 isDerangement:: [Int] -> [Int] -> Bool
 isDerangement xs ys = checkItemDerangement xs xs ys
 
