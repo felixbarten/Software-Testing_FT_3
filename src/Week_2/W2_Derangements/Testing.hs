@@ -1,8 +1,43 @@
-module Week_2.W2_Permutations.Permutations (isPermutation) where
+{-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE ExistentialQuantification #-}
+module Testing where
 
+import Data.Maybe
+import Control.Arrow
+
+--Cabal pls
 import Data.List
-import Data.Char
 import System.Random
+
+data Test    = forall a. Show a => Test String (a -> Bool) [a]
+data Failure = forall a. Show a => Fail String [a]
+
+instance Show Failure where
+    show (Fail s as) = "Failed Test \"" ++ s
+                       ++ "\" on inputs " ++ show as
+
+runTest :: Test -> Maybe Failure
+runTest (Test s f as) = case filter (not . f) as of
+                          [] -> Nothing
+                          fs -> Just $ Fail s fs
+
+runTests :: [Test] -> [Failure]
+runTests = catMaybes . map runTest
+
+-- Helpers
+
+testF1 :: (Show a, Show b, Eq b) => String -> (a -> b) -> [(a, b)] -> Test
+testF1 s f l = Test s (uncurry (==)) $ map (first f) l
+
+testF2 :: (Show a, Show b, Show c, Eq c) => String -> (a -> b -> c)
+       -> [(a, b, c)] -> Test
+testF2 s f l = Test s (uncurry (==)) $ map (\(x, y, z) -> (f x y, z))  l
+
+testF3 :: (Show a, Show b, Show c, Show d, Eq d) => String -> (a -> b -> c -> d)
+       -> [(a, b, c, d)] -> Test
+testF3 s f l = Test s (uncurry (==)) $ map (\(w, x, y, z) ->  (f w x y, z)) l
+
+------- Misc
 
 -- Generate a random integer
 getRandomInt :: Int -> IO Int
@@ -67,50 +102,3 @@ testR' k n f r = if k == n then print (show n ++ " tests passed")
 -- Used to test post conditions  
 testPost' :: ([Int] -> [Int]-> Bool) -> ([Int] -> [Int] -> Bool ) -> IO ()
 testPost' = testR' 1 100  
-
--- Can be used to compare the length of two lists
-samelength :: [a] -> [a] -> Bool
-samelength xs ys = length xs == length ys
-
--- A sorting function stolen from the lecture
-quicksort :: Ord a => [a] -> [a]  
-quicksort [] = []  
-quicksort (x:xs) = 
-   quicksort [ a | a <- xs, a <= x ]  
-   ++ [x]
-   ++ quicksort [ a | a <- xs, a > x ]
-
--- Checks is two lists are permutations
-isPermutation :: Ord a => [a] -> [a] -> Bool
-isPermutation xs ys =  aux  xs == aux ys 
-                  where aux = quicksort . nub
-
--- Used as a control function for testing the permutation function
-prop_perm :: Eq a => [a] -> [a] -> Bool
-prop_perm = isPerm   
-              where isPerm xs ys = all (`elem` ys) xs && all(`elem` xs) ys
-
--- Used as a control function for testing the permutation function
-prop_perm' :: Eq a => [a] -> [a] -> Bool
-prop_perm' xs ys = xs `elem` permutations ys
-
--- I don't even know
-testRel' :: ([Int] -> [Int] -> Bool) -> ([Int] -> [Int] -> Bool) -> IO ()
-testRel' = testR' 1 100 
-
--- Used to test the permutation function
-testIsPropPerm :: IO ()
-testIsPropPerm = testPost' isPermutation prop_perm'   
-
--- Nope
--- testIsSameLength :: IO ()
--- testIsSameLength = testPost' isPermutation samelength
-
-
--- Test Report
---
--- Using the techniques shown during a lecture an automated test was created that generates a random list of integers and then generates a lists containing
--- all of its permutations. A coin is then flipped to decide whether or not to generate a new list. The list is then returned along with the permutations.
--- The permutations function from the Data.List module is used as a control function to validate my implementation of isPermutation. 
---
--- Time spent: 3 hours
