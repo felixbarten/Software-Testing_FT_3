@@ -18,10 +18,6 @@ perms (x:xs) = concat (map (insrt x) (perms xs)) where
 If you assume that the input list does not contain duplicates it would be easier to check if the elements are permutations?
 -}
 
-{-
-Properties 
--}
-
 
 {- 
 Testing

@@ -64,49 +64,13 @@ convertAlphabetic ch | ch == 'A' = convertToChar 10
                     
         
 -- calculate check digits 
-calculateCheckDigits :: String -> Integer
-calculateCheckDigits nr = 98 - rem iban 97 
+calculateCheckDigits :: String -> String
+calculateCheckDigits nr = if (98 - rem iban 97 < 10) then "0" ++ show (98 - rem iban 97) else show (98 - rem iban 97)
     where iban = (strToInteger . convertAlphaNumeric. moveCheckDigits .  trimSpaces) nr
 
+
         
-{- 
-Testing
--}
-
-randomFlip :: Int -> IO Int
-randomFlip x = do 
-   b <- getRandomInt 1
-   if b==0 then return x else return (-x)
-
-getRandomInt :: Int -> IO Int
-getRandomInt n = getStdRandom (randomR (0,n))
-                    
-genIntList :: IO [Int]
-genIntList = do 
-  k <- getRandomInt 20
-  n <- getRandomInt 10
-  getIntL k n
   
-getIntL :: Int -> Int -> IO [Int]
-getIntL _ 0 = return []
-getIntL k n = do 
-   x <-  getRandomInt k
-   y <- randomFlip x
-   xs <- getIntL k (n-1)
-   return (y:xs)                
-
-
-testR :: Int -> Int -> ([Int] -> [Int]) -> ([Int] -> [Int] -> Bool) -> IO ()
-testR k n f r = if k == n then print (show n ++ " tests passed")
-                else do
-                  xs <- genIntList
-                  if r xs (f xs) then
-                    do print ("pass on: " ++ show xs)
-                       testR (k+1) n f r
-                  else error ("failed test on: " ++ show xs)
-                  
-                  
-                  
                   
 -- general tests
 
@@ -115,7 +79,7 @@ testIban (s, r) = iban s == r
 
 
 validIBANTests :: [Test]
-validIBANTests = [ Test "Iban Tests" testIban [
+validIBANTests = [ Test "Valid Tests" testIban [
     ("AL47 2121 1009 0000 0002 3569 8741", True),
     ("AD12 0001 2030 2003 5910 0100", True),
     ("FR14 2004 1010 0505 0001 3M02 606", True),
@@ -165,9 +129,83 @@ allTests = concat [ validIBANTests
                   , invalidIBANTests
                   ]
                   
+{- 
+(Mostly) automated Testing
+-}
+
+randomFlip :: Int -> IO Int
+randomFlip x = do 
+   b <- getRandomInt 1
+   if b == 0 then return x else return (-x)
+
+getRandomInt :: Int -> IO Int
+getRandomInt n = getStdRandom (randomR (0,n))
+                    
+genIntList :: IO [Int]
+genIntList = do 
+  k <- getRandomInt 20
+  n <- getRandomInt 10
+  getIntL k n
+  
+getIntL :: Int -> Int -> IO [Int]
+getIntL _ 0 = return []
+getIntL k n = do 
+   x <-  getRandomInt k
+   y <- randomFlip x
+   xs <- getIntL k (n-1)
+   return (y:xs)                
+
+countryCodes :: [String]
+countryCodes = ["NL","GB","FR","FO", "GR", "GL"]
+
+pick :: [a] -> IO a
+pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
+
+genCountryCode :: IO String
+genCountryCode = pick countryCodes
+
+genBankAccount :: IO Integer
+genBankAccount = getStdRandom (randomR (10000,10000000))
+
+
+genTestIban ::  IO String
+genTestIban = do 
+              cc <- genCountryCode
+              bb <- genBankAccount
+              let accnum = cc ++ genCheckDigit (cc ++ "00" ++ show bb) ++ show bb
+              return accnum
+                            
+genCheckDigit :: String -> String
+genCheckDigit = calculateCheckDigits
+
+genIBANList :: IO [String]
+genIBANList = getIBANL 1 100
+
+getIBANL :: Int -> Int -> IO [String]
+getIBANL _ 0 = return []
+getIBANL k n = do 
+   x <-  genTestIban
+   xs <- getIBANL k (n-1)
+   return (x:xs) 
+   
+
+
+
+testR :: Int -> Int -> (String -> Bool) -> (String -> Bool) -> IO ()
+testR k n f r = if k == n then print (show n ++ " tests passed")
+                else do
+                  xs <- genTestIban
+                  if r xs == (f xs) then
+                    do print ("pass on: " ++ show xs ++ " IBAN is valid: " ++ show (r xs))
+                       testR (k+1) n f r
+                  else error ("failed test on: " ++ show xs)    
+          
+          {-        
+ testIBAN :: Int -> Int -> ([String -> Bool]) -> ([String -> Bool]) -> IO()
+ testIBAN = undefined
                   
                   
-                  
+                -}  
                   
                   
                   
