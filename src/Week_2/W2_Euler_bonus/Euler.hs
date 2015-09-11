@@ -21,7 +21,7 @@ primes:: [Integer]
 primes = filter prime [2..]
 
 primeFactors :: Integer -> [Integer]
-primeFactors n = filter (\x -> rem n x == 0) (takeWhile (<= n) primes)
+primeFactors n = filter (\x -> rem n x == 0) (takeWhile (\p -> p*p<n) primes)
 
 project_euler_3 :: Integer
 project_euler_3 = last $ primeFactors 600851475143  
