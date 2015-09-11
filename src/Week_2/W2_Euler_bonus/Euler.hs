@@ -33,3 +33,11 @@ isPalindrome x = x == (read . reverse . show $ x)
 
 project_euler_4 :: Integer
 project_euler_4 = maximum [ z | x <- [100..999], y <- [x..999], let z = x*y, isPalindrome z ] 
+
+-- Euler 5
+evenlyDivisible :: Integer -> Bool
+evenlyDivisible y = foldr (\x acc -> rem y x == 0 && acc  ) True [1..20]
+
+project_euler_5 :: Integer
+project_euler_5 =  minimum [ x | x <- [21..], evenlyDivisible x]
+-- ^ will run for a while 
