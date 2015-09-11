@@ -11,6 +11,7 @@ triangle x y z | isEquilateral x y z = Equilateral
                | isRectangular x y z = Rectangular
                | isNoTriangle x y z = NoTriangle
                | isOther x y z = Other
+-- ^ could have been written as one function
                  
 isEquilateral :: Integer -> Integer -> Integer -> Bool
 isEquilateral x y z = x == y && y == z
@@ -57,8 +58,8 @@ isOtherTests = [ Test "Other Tests" testIsOther [(13, 14, 9, Other), (15, 14,9, 
 equilateralTests :: [Test]
 equilateralTests = [Test "Rectangular Tests" testIsOther [(350, 350, 350, Equilateral), (12, 12,12, Equilateral)]
            ]          
-           
-           -- All Tests ------------------------------------------
+
+-- All Tests ------------------------------------------
 
 allTests :: [Test]
 allTests = concat [ rectangularTests

@@ -16,19 +16,19 @@ perms (x:xs) = concat (map (insrt x) (perms xs)) where
   insrt x (y:ys) = (x:y:ys) : map (y:) (insrt x ys)
 {- 
 If you assume that the input list does not contain duplicates it would be easier to check if the elements are permutations?
+
+No, the amount of permutations doesn't change (still 2^n) but the permutations might be equal to each other. For example:
+perms [5,5,5] = [[5,5,5],[5,5,5],[5,5,5],[5,5,5],[5,5,5],[5,5,5]]
 -}
 
 
 {- 
 Testing
 -}
-testPermutations :: [Int] -> [Int]
-testPermutations = undefined
-
 randomFlip :: Int -> IO Int
 randomFlip x = do 
    b <- getRandomInt 1
-   if b==0 then return x else return (-x)
+   if b == 0 then return x else return (-x)
 
 getRandomInt :: Int -> IO Int
 getRandomInt n = getStdRandom (randomR (0,n))
@@ -48,7 +48,7 @@ getIntL k n = do
    return (y:xs)                
 
 
-testR :: Int -> Int -> ([Int] -> [Int]) -> ([Int] -> [Int] -> Bool) -> IO ()
+testR :: Int -> Int -> ([Int] -> [Int] -> Bool) -> ([Int] -> [Int] -> Bool) -> IO ()
 testR k n f r = if k == n then print (show n ++ " tests passed")
                 else do
                   xs <- genIntList
@@ -80,11 +80,14 @@ prop_ordered :: Ord a => [a] -> Bool
 prop_ordered [] = True
 prop_ordered (x:xs) = all (>= x) xs && prop_ordered xs
 
+prop_samelength :: [a] -> [a] -> Bool
+prop_samelength xs ys  = xs `length` == length ys
+
 isTrue :: a -> Bool
 isTrue _ = True
 
 testRel :: ([Int] -> [Int]) -> ([Int] -> [Int] -> Bool) -> IO ()
-testRel f r = testR 1 100 f r 
+testRel = testR 1 100 
 
 quicksrt :: Ord a => [a] -> [a]  
 quicksrt [] = []  

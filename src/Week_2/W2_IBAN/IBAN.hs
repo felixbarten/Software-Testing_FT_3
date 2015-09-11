@@ -164,15 +164,20 @@ pick xs = randomRIO (0, length xs - 1) >>= return . (xs !!)
 genCountryCode :: IO String
 genCountryCode = pick countryCodes
 
-genBankAccount :: IO Integer
-genBankAccount = getStdRandom (randomR (10000,10000000))
-
-
+genAccountNum :: IO Integer
+genAccountNum = getStdRandom (randomR (10000,10000000))
+                  
+genBankAccount :: IO String
+genBankAccount = do
+            x <- genAccountNum
+            let acc = show x
+            return acc
+            
 genTestIban ::  IO String
 genTestIban = do 
               cc <- genCountryCode
               bb <- genBankAccount
-              let accnum = cc ++ genCheckDigit (cc ++ "00" ++ show bb) ++ show bb
+              let accnum = cc ++ genCheckDigit (cc ++ "00" ++ bb) ++ bb
               return accnum
                             
 genCheckDigit :: String -> String
