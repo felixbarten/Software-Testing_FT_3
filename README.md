@@ -4,4 +4,5 @@
 * Felix Barten
 * Joel Bartholomew
 * Bart de Man
+* Spiros Tzavaras
 
