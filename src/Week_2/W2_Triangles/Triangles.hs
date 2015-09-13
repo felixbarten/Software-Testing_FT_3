@@ -1,6 +1,6 @@
 module Week_2.W2_Triangles.Triangles where
 
-import  Week_2.Testing
+import Week_2.Testing
 
 data Shape = NoTriangle | Equilateral 
            | Isosceles  | Rectangular | Other deriving (Eq,Show)

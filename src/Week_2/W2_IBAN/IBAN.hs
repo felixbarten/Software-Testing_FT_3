@@ -122,9 +122,7 @@ invalidIBANTests = [ Test "Invalid Tests" testIban [
 -- All Tests ------------------------------------------
 
 allTests :: [Test]
-allTests = concat [ validIBANTests
-                  , invalidIBANTests
-                  ]
+allTests = validIBANTests ++ invalidIBANTests
                   
 {- Properties -}
 
