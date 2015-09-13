@@ -123,6 +123,7 @@ Used as a control function for testing the permutation function
 > testRel' = testR' 1 100 
 
 Used to test the permutation function
+
 > testIsPropPerm :: IO ()
 > testIsPropPerm = testPost' isPermutation prop_perm'   
 
