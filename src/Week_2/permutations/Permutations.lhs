@@ -1,4 +1,4 @@
-> module Week_2.W2_Permutations.Permutations (isPermutation) where
+> module Permutations (isPermutation) where
 
 > import Data.List
 > import Data.Char
@@ -50,6 +50,7 @@ This function is used to flip a coin
 > coinToss = getRandomInt 1
 
 Used to get a even distribution of positive and negative numbers
+
 > randomFlip :: Int -> IO Int
 > randomFlip x = do 
 >    b <- getRandomInt 1

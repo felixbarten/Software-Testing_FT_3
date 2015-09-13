@@ -1,6 +1,18 @@
-module Week_2.W2_Triangles.Triangles where
+module Triangles where
 
-import Week_2.Testing
+-- Test Report Triangles
+--  
+-- In order to test the triangles program a few tests were written to check whether a few numbers could be a certain type of triangle. These tests were all written manually without any automatic testing.
+--  
+-- Console output:
+-- Week_2.W2_Triangles.Triangles> runTests allTests
+-- []
+-- (0.02 secs, 8647144 bytes)
+--  
+--  
+-- Time spent: 30 minutes
+
+import Testing
 
 data Shape = NoTriangle | Equilateral 
            | Isosceles  | Rectangular | Other deriving (Eq,Show)

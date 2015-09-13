@@ -1,4 +1,4 @@
-> module Week_2.W2_Derangements.Derangements where
+> module Derangements where
  
 > import Testing
 
