@@ -68,10 +68,7 @@ calculateCheckDigits :: String -> String
 calculateCheckDigits nr = if (98 - rem iban 97 < 10) then "0" ++ show (98 - rem iban 97) else show (98 - rem iban 97)
     where iban = (strToInteger . convertAlphaNumeric. moveCheckDigits .  trimSpaces) nr
 
-
-        
-  
-                  
+          
 -- general not automated tests
 
 testIban :: (String, Bool) -> Bool
@@ -208,7 +205,6 @@ getIBANL k n = do
    x <-  genIBAN
    xs <- getIBANL k (n-1)
    return (x:xs) 
-   
 
 test_valid :: Int -> Int -> (String -> Bool) -> (String -> Bool) -> IO ()
 test_valid k n f r = if k == n then print (show n ++ " tests passed")

@@ -2,6 +2,7 @@ module Week_2.W2_Permutations.Permutations where
 
 import Data.List
 import System.Random
+import Week_2.Testing
 
 isPermutation :: Eq a => [a] -> [a] -> Bool
 isPermutation xs ys = xs `elem` permutations ys && ys `elem` permutations xs
@@ -25,6 +26,44 @@ perms [5,5,5] = [[5,5,5],[5,5,5],[5,5,5],[5,5,5],[5,5,5],[5,5,5]]
 {- 
 Testing
 -}
+
+-- general not automated tests
+
+testIsPermutation :: ([Int], [Int], Bool) -> Bool
+testIsPermutation (xs, ys, b) = isPermutation xs ys == b
+
+
+permutationTests :: [Test]
+permutationTests = [ Test "Valid Tests" testIsPermutation [
+    ([1,3,5], [5,3,1], True),
+    ([2,3,4,6,7,8,9], [9,8,7,6,4,2,3], True),
+    ([0,1,5], [1,0,5], True),
+    ([0,2,-2,2,0],[2,-2,0,2,0], True),
+    ([-5,4,3,7],[7,-5,3,4], True),
+    ([10,11,12,13,14],[14,12,11,10,13], True),
+    ([8,4,2,1],[4,1,2,8], True),    
+    ([45,32,87,54],[54,32,87,45], True)                                           ]
+        ]
+
+noPermutationTests :: [Test]
+noPermutationTests = [ Test "Invalid Tests" testIsPermutation [
+    ([1,3,5], [5,3,10], False),
+    ([2,3,4,6,7,8,9], [9,8,7,6,4,2,3,20], False),
+    ([0],[0,1], False),
+    ([45,32,87,54],[54,32,87,54,45], False)                                           ]
+                            
+            ]
+
+-- All Tests ------------------------------------------
+
+allTests :: [Test]
+allTests = concat [ permutationTests
+                  , noPermutationTests
+                  ]
+
+{- (mostly) automated tests -}
+
+
 randomFlip :: Int -> IO Int
 randomFlip x = do 
    b <- getRandomInt 1
@@ -52,7 +91,8 @@ testR :: Int -> Int -> ([Int] -> [Int] -> Bool) -> ([Int] -> [Int] -> Bool) -> I
 testR k n f r = if k == n then print (show n ++ " tests passed")
                 else do
                   xs <- genIntList
-                  if r xs (f xs) then
+                  ys <- genIntList
+                  if r xs ys == (f xs ys) then
                     do print ("pass on: " ++ show xs)
                        testR (k+1) n f r
                   else error ("failed test on: " ++ show xs)
@@ -67,12 +107,6 @@ testPerms k n f r = if k == n then print (show n ++ " tests passed")
                        testPerms (k+1) n f r
                   else error ("failed test on: " ++ show xs)
                   
-testPost :: ([Int] -> [Int]) -> ([Int] -> Bool) -> IO ()
-testPost f p = testR 1 100 f (\_ -> p)
-                  
-testPre :: ([Int] -> Bool) -> ([Int] -> [Int]) -> IO ()
-testPre p f  = testR 1 100 f (\_ -> p)
-                  
 samelength :: [Int] -> [Int] -> Bool
 samelength xs ys = length xs == length ys
 
@@ -81,13 +115,13 @@ prop_ordered [] = True
 prop_ordered (x:xs) = all (>= x) xs && prop_ordered xs
 
 prop_samelength :: [a] -> [a] -> Bool
-prop_samelength xs ys  = xs `length` == length ys
+prop_samelength xs ys  = length xs == length ys
 
 isTrue :: a -> Bool
 isTrue _ = True
 
-testRel :: ([Int] -> [Int]) -> ([Int] -> [Int] -> Bool) -> IO ()
-testRel = testR 1 100 
+testRel :: ([Int] -> [Int] -> Bool) -> ([Int] -> [Int] -> Bool) -> IO ()
+testRel f r = testR 1 100 f r 
 
 quicksrt :: Ord a => [a] -> [a]  
 quicksrt [] = []  
