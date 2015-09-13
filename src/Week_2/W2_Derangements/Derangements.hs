@@ -1,13 +1,9 @@
 module Week_2.W2_Derangements.Derangements where
 
-{-
-isDerangement :: Eq a => [a] -> [a] -> Bool
-isDerangement xs ys = deran xs == deran ys
+import Data.List
+import System.Random
+import Testing
 
-deran :: Eq a => [a] -> [[a]]
-deran xs =  filter (and . zipWith (/=) xs) $ permutations xs
-
--}
 
 isDerangement:: [Int] -> [Int] -> Bool
 isDerangement xs ys = checkItemDerangement xs xs ys
@@ -20,6 +16,10 @@ checkItemDerangement xs zs ys =
 		if ((head ys) `elem` xs) && (head ys /= head zs)
 		then checkItemDerangement xs (removeFromList (head zs) zs) (removeFromList (head ys) ys)
 		else False
+
+deran :: Eq a => [a] -> [[a]]
+deran xs =  filter (and . zipWith (/=) xs) $ permutations xs
+
 
 {- *** below wrong version ***
 
