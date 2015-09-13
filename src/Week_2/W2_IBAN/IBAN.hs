@@ -1,7 +1,7 @@
 module Week_2.W2_IBAN.IBAN where
 
 import Data.Char (isAlphaNum,isDigit, digitToInt)
-
+import Testing
 digits :: Integer -> [Integer]
 digits = map (read . return) . show
 

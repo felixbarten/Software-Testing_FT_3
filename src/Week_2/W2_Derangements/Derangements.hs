@@ -18,7 +18,7 @@ isDerangement xs ys = isPermutation xs ys  && helper xs ys
 
 deran :: Integer -> [[Integer]]
 deran n = filter (isDerangement list) $ permutations list 
-          where list = [1..n-1]
+          where list = [0..n-1]
 
 -- Can be used to compare the length of two lists
 samelength :: [a] -> [a] -> Bool
