@@ -7,7 +7,6 @@ import Data.List
 fibonacci_seq :: [Integer]
 fibonacci_seq = 1: 1 : zipWith (+) fibonacci_seq (tail fibonacci_seq)
 
-
 project_euler_2 :: Integer 
 project_euler_2 = sum [ x | x <- takeWhile (<= 4000000) fibonacci_seq, even x]
 

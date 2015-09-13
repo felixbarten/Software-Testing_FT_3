@@ -72,10 +72,10 @@ calculateCheckDigits nr = if (98 - rem iban 97 < 10) then "0" ++ show (98 - rem 
         
   
                   
--- general tests
+-- general not automated tests
 
 testIban :: (String, Bool) -> Bool
-testIban (s, r) = iban s == r
+testIban (s, b) = iban s == b
 
 
 validIBANTests :: [Test]
@@ -122,16 +122,22 @@ invalidIBANTests = [ Test "Invalid Tests" testIban [
     ("CZ65 0800 0000 1920 0014 5390", False)
                                          ]
             ]
-           -- All Tests ------------------------------------------
+-- All Tests ------------------------------------------
 
 allTests :: [Test]
 allTests = concat [ validIBANTests
                   , invalidIBANTests
                   ]
                   
-{- 
-(Mostly) automated Testing
--}
+{- Properties -}
+
+prop_samelength :: String -> String -> Bool
+prop_samelength a b= length a == length b
+
+prop_iban :: String -> Bool
+prop_iban = undefined
+
+{- (Mostly) automated Testing -}
 
 randomFlip :: Int -> IO Int
 randomFlip x = do 
@@ -173,12 +179,22 @@ genBankAccount = do
             let acc = show x
             return acc
             
-genTestIban ::  IO String
-genTestIban = do 
+genIBAN ::  IO String
+genIBAN = do 
               cc <- genCountryCode
               bb <- genBankAccount
               let accnum = cc ++ genCheckDigit (cc ++ "00" ++ bb) ++ bb
               return accnum
+              
+-- ^ Generates a valid IBAN number 
+       
+genInvalidIBAN ::  IO String
+genInvalidIBAN = do 
+                cc <- genIBAN
+                let accnum = (take 4 cc) ++ (show . (+1) . read) (drop 4 cc)
+                return accnum   
+-- ^ Gen invalid IBAN       
+                         
                             
 genCheckDigit :: String -> String
 genCheckDigit = calculateCheckDigits
@@ -189,28 +205,28 @@ genIBANList = getIBANL 1 100
 getIBANL :: Int -> Int -> IO [String]
 getIBANL _ 0 = return []
 getIBANL k n = do 
-   x <-  genTestIban
+   x <-  genIBAN
    xs <- getIBANL k (n-1)
    return (x:xs) 
    
 
-
-
-testR :: Int -> Int -> (String -> Bool) -> (String -> Bool) -> IO ()
-testR k n f r = if k == n then print (show n ++ " tests passed")
+test_valid :: Int -> Int -> (String -> Bool) -> (String -> Bool) -> IO ()
+test_valid k n f r = if k == n then print (show n ++ " tests passed")
                 else do
-                  xs <- genTestIban
-                  if r xs == (f xs) then
+                  xs <- genIBAN
+                  if r xs == f xs then
                     do print ("pass on: " ++ show xs ++ " IBAN is valid: " ++ show (r xs))
-                       testR (k+1) n f r
+                       test_valid (k+1) n f r
                   else error ("failed test on: " ++ show xs)    
           
-          {-        
- testIBAN :: Int -> Int -> ([String -> Bool]) -> ([String -> Bool]) -> IO()
- testIBAN = undefined
-                  
-                  
-                -}  
+test_invalid :: Int -> Int -> (String -> Bool) -> IO ()
+test_invalid k n f = if k == n then print (show n ++ " tests passed")
+                else do
+                  xs <- genInvalidIBAN
+                  if f xs == False then
+                    do print ("pass on: " ++ show xs ++ " IBAN is valid: " ++ show (f xs))
+                       test_invalid (k+1) n f
+                  else error ("failed test on: " ++ show xs)   
                   
                   
                   
