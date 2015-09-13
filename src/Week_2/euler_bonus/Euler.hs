@@ -49,3 +49,16 @@ evenlyDivisible y = foldr (\x acc -> rem y x == 0 && acc  ) True [1..20]
 project_euler_5 :: Integer
 project_euler_5 =  minimum [ x | x <- [21..], evenlyDivisible x]
 -- ^ will run for a while 
+
+-- euler 6
+
+sumOfSquares :: Integer  -> Integer
+sumOfSquares x = sum (map (^2) [1..x])
+
+squareOfSums:: Integer -> Integer
+squareOfSums x = (sum [1..x]) ^2
+
+calculateDifference :: Integer -> Integer
+calculateDifference x =  squareOfSums x - sumOfSquares x
+
+-- result: 25164150
