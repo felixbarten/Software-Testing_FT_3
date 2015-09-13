@@ -1,4 +1,31 @@
 module IBAN where
+
+-- Test Report IBAN
+--  
+-- The automatic tests for iban were created by creating a number of functions that made generating random valid IBAN numbers possible.
+-- Furthermore to get invalid examples the previous functions were extended by incrementing the account number after the calculations for the bank account were completed.
+-- This method ensures the iban is invalid when testing for invalidity.
+--  
+-- Console output:
+--  
+-- *IBAN> testValidIBAN 100
+-- "*** pass on: AT547431007"
+-- "*** pass on: AZ1013378060"
+-- "*** pass on: BG627199088"
+-- "*** pass on: GR866627280"
+-- "*** pass on: AT661512336"
+-- "*** pass on: AZ662733824"
+-- "*** pass on: BH442929418"
+--
+--
+-- *IBAN> testFalseIBAN  100
+-- "*** pass on: BG271448783"
+-- "*** pass on: BA2512533817"
+-- "*** pass on: BG3511799993"
+-- "*** pass on: BE0810817395"
+-- "*** pass on: AT6910827968"
+-- "*** pass on: AZ316331990"
+
 import Data.Char
 import System.Random
 import Data.List
