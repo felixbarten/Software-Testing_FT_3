@@ -2,8 +2,7 @@ module Week_2.W2_Euler_bonus.Euler where
 
 import Data.List
 
-
--- euler 1
+-- Euler 1
 
 calcSumOfMultiOfThreeOrFive :: Integer  
 calcSumOfMultiOfThreeOrFive = sum . takeWhile (<1000) . filter divi $ [1..]
