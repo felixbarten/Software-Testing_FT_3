@@ -7,8 +7,8 @@ import Week_2.Testing
 isPermutation :: Eq a => [a] -> [a] -> Bool
 isPermutation xs ys = xs `elem` permutations ys && ys `elem` permutations xs
 
-prop_permutation :: Eq a => [a] -> [a] -> Bool
-prop_permutation xs ys = perms xs == perms ys
+prop_permutation :: Ord a => [a] -> [a] -> Bool
+prop_permutation xs ys = sort (perms xs) == sort (perms ys)
 
 perms :: [a] ->[[a]]
 perms [] = [[]]
@@ -57,9 +57,7 @@ noPermutationTests = [ Test "Invalid Tests" testIsPermutation [
 -- All Tests ------------------------------------------
 
 allTests :: [Test]
-allTests = concat [ permutationTests
-                  , noPermutationTests
-                  ]
+allTests = permutationTests ++ noPermutationTests
 
 {- (mostly) automated tests -}
 
@@ -105,7 +103,7 @@ testPerms k n f r = if k == n then print (show n ++ " tests passed")
                   if r xs ys  == (f xs ys) then
                     do print ("pass on: expected permutation?:" ++ show  (r xs ys || f xs ys) ++ " from: "++ show xs ++ " and " ++ show ys)
                        testPerms (k+1) n f r
-                  else error ("failed test on: " ++ show xs)
+                  else error ("failed test on: " ++ show xs ++ " and " ++ show ys )
                   
 samelength :: [Int] -> [Int] -> Bool
 samelength xs ys = length xs == length ys

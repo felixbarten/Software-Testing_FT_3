@@ -132,8 +132,12 @@ prop_samelength :: String -> String -> Bool
 prop_samelength a b= length a == length b
 
 prop_iban :: String -> Bool
-prop_iban = undefined
-
+prop_iban ib =  rem banknr 97 == 1 
+    where banknr = (read . convertAlphaNumeric . moveChar 4  . trimSpaces) ib
+    
+moveChar :: Int -> String -> String
+moveChar _ [] = []
+moveChar n (x:xs)= if n > 0 then moveChar (n - 1) (xs ++ [x]) else x : xs
 {- (Mostly) automated Testing -}
 
 randomFlip :: Int -> IO Int
@@ -211,7 +215,7 @@ test_valid k n f r = if k == n then print (show n ++ " tests passed")
                 else do
                   xs <- genIBAN
                   if r xs == f xs then
-                    do print ("pass on: " ++ show xs ++ " IBAN is valid: " ++ show (r xs))
+                    do print (show (k+1) ++ ". pass on: " ++ show xs ++ " IBAN is valid: " ++ show (r xs))
                        test_valid (k+1) n f r
                   else error ("failed test on: " ++ show xs)    
           
@@ -220,10 +224,9 @@ test_invalid k n f = if k == n then print (show n ++ " tests passed")
                 else do
                   xs <- genInvalidIBAN
                   if f xs == False then
-                    do print ("pass on: " ++ show xs ++ " IBAN is valid: " ++ show (f xs))
+                    do print (show (k+1) ++ ". pass on: " ++ show xs ++ " IBAN is valid: " ++ show (f xs))
                        test_invalid (k+1) n f
                   else error ("failed test on: " ++ show xs)   
-                  
                   
                   
                   

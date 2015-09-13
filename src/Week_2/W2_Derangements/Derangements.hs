@@ -13,28 +13,9 @@ derangement xs =  filter (and . zipWith (/=) xs) $ permutations xs
 
 deran :: Integer -> [[Integer]]
 deran n = derangement [0..n-1]
-
 {- 
 Testing
 -}
-
-permutations2 :: [a] ->[[a]]
-permutations2 [] = [[]]
-permutations2 (x:xs) = concatMap (insrt x) (permutations xs)
-                      where insrt x [] = [[x]]
-                            insrt x (y:ys) = (x:y:ys) : map (y:) (insrt x ys)
-                            
-isPermutation :: Eq a => [a] -> [a] -> Bool
-isPermutation xs ys = all (`elem` ys) xs && all(`elem` xs) ys 
-
-isDerangement2 :: Eq a => [a] -> [a] -> Bool
-isDerangement2 xs ys = isPermutation xs ys  && helper xs ys
-                      where helper [] [] = True
-                            helper (x:xs) (y:ys) = x /= y && helper xs ys 
-
-deran2 :: Integer -> [[Integer]]
-deran2 n = filter (isDerangement2 list) $ permutations2 list 
-          where list = [0..n-1]
 
 -- general not automated tests
 
@@ -71,9 +52,7 @@ noDerangementTests = [ Test "Invalid Tests" testIsDerangement [
 -- All Tests ------------------------------------------
 
 allTests :: [Test]
-allTests = concat [ derangementTests
-                  , noDerangementTests
-                  ]
+allTests = derangementTests ++ noDerangementTests
 
 {- (mostly) automated tests -}
 
@@ -112,7 +91,7 @@ testR k n f r = if k == n then print (show n ++ " tests passed")
                   xs <- genIntList
                   ys <- genIntList
                   if r xs ys == (f xs ys) then
-                    do print ("pass on: " ++ show xs)
+                    do print (show (k+1) ++ ". pass on: " ++ show xs)
                        testR (k+1) n f r
                   else error ("failed test on: " ++ show xs)
                   
@@ -122,7 +101,7 @@ testDerangements k n f r = if k == n then print (show n ++ " tests passed")
                   xs <- genIntList
                   ys <- shuffle xs
                   if r xs ys  == (f xs ys) then
-                    do print ("pass on: expected derangement?:" ++ show  (r xs ys || f xs ys) ++ " from: "++ show xs ++ " and " ++ show ys)
+                    do print (show (k+1) ++ ". pass on: expected derangement?:" ++ show  (r xs ys || f xs ys) ++ " from: "++ show xs ++ " and " ++ show ys)
                        testDerangements (k+1) n f r
                   else error ("failed test on: " ++ show xs)
                   
@@ -135,3 +114,10 @@ prop_ordered (x:xs) = all (>= x) xs && prop_ordered xs
 
 prop_samelength :: [a] -> [a] -> Bool
 prop_samelength xs ys  = length xs == length ys
+
+prop_derangement :: Eq a=> [a] -> [a] -> Bool
+prop_derangement xs ys = xs `elem` permutations ys && ys `elem` permutations xs && isDeran xs ys
+
+isDeran :: Eq a => [a] -> [a] -> Bool
+isDeran [] [] = True
+isDeran (x:xs) (y:ys) = x /= y && isDeran xs ys 
