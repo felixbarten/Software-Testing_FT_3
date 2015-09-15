@@ -47,17 +47,18 @@ Equiv tester
 
 This gives:
 
- *Exercise1> tautology form5
- True
- *Exercise1> contradiction form4
- True
- *Exercise1> equiv form4 form5 
- False -- Should return false because all T is not equivalent to all F
- *Exercise1> entails form4 form5
- True
- *Exercise1> equiv form1 form5
- True
- 
+
+    *Exercise1> tautology form5
+    True
+    *Exercise1> contradiction form4
+    True    
+    *Exercise1> equiv form4 form5 
+    False -- Should return false because all T is not equivalent to all F
+    *Exercise1> entails form4 form5
+    True
+    *Exercise1> equiv form1 form5
+    True
+
  
  Time spent: 1 hour
  
