@@ -4,6 +4,7 @@ The lecture notes of this week discuss the conversion of Boolean formulas (formu
 The lecture notes also give a definition of a Haskell datatype for formulas of propositional logic, using lists for conjunctions and disjunctions. 
 Your task is to write a Haskell program for converting formulas into CNF.
 
+
 Deliverables: conversion program with documentation, indication of time spent.
 
 > import Lecture3
@@ -123,3 +124,4 @@ After that it was important to check whether the formula's that were converted t
 
 
 Time spent: 30 minutes (already created generator in exercise 2) 
+
