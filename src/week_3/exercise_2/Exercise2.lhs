@@ -56,7 +56,7 @@ Test function for the parse functionality can be found below
 
 > parseTest = quickCheckWith customArgs parse'
 
-Time spent on exercise two: 5,5 uur
+Test Report
 
 Output for tests:
 
@@ -74,3 +74,4 @@ Loading package template-haskell ... linking ... done.
 Loading package QuickCheck-2.6 ... linking ... done.
 +++ OK, passed 100 tests.
 
+Time spent on exercise two: 5,5 hours

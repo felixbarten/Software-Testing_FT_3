@@ -1,3 +1,3 @@
 > module Exercise4 where
 
-See exercise 2 & 3 .lhs
+exercise 4 included in exercise 3 file. 
