@@ -12,7 +12,7 @@ The parse function is tested using quickCheck. Arbitrary Forms are generated and
  - That the parser can parse valid forms
  - That the parser is idempotent
 
-*Time Spent: Long enough*
+*Time Spent: 6 hours (long enough)*
 
 > instance Arbitrary Form where
 >    arbitrary = form

@@ -14,7 +14,7 @@ new form has the same result as using entails and equiv on the original paramete
 > testEntails = tautology (arrowfree (Impl form1 form2)) == entails form1 form2 
 
 > testEquiv :: Bool
-> testEquiv = tautology (arrowfree (Equiv form1 form2)) == entails form1 form2 
+> testEquiv = tautology (arrowfree (Equiv form1 form2)) == equiv form1 form2 
 
 *Time Spent: 2 hour*
 
