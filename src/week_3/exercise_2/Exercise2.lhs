@@ -9,8 +9,6 @@ Testing module for Lecture3 Parse merthod
 > instance Arbitrary Form where
 >   arbitrary   = sized form
 
-
-
 > form :: Int -> Gen Form 
 > form 0 = do
 >       x <- choose(1,10) :: Gen Int 
@@ -44,7 +42,7 @@ Example test
 
 
 > parse' :: Form -> Bool
-> parse' x = (parse $ show x) == (parse . show . head) (parse $ show x)
+> parse' x = (parse . show) x == (parse . show . head .parse .show) x
 
 Custom args for our tests.
 If the maxSize exceeds 40 the random data structures might not finish calculation and may result in crashing computers ;)

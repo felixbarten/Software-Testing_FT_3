@@ -29,12 +29,62 @@
  
  cls (Cnj [f1,f2]) = cls f1 ++ cls f2
  
-> cls (Cnj fs) =   [(Clause  [concat $ map cls fs])]
+cls (Cnj fs) =   [(Clause  [concat $ map cls fs])]
 
- cls (Dsj fs) = Clause [concat $ head (map cls fs)]
+> cls (Dsj fs) = [(Clause [concat $ head (map cls fs)])]
  
 > cls (Impl _ _) = []
 > cls (Equiv _ _) = []
+
+
+
+
+> cnf2cls2 :: Form -> Clauses
+> cnf2cls2 f = [cls2 f]
+
+
+
+> cls2 :: Form -> Clause
+> cls2 (Prop x) = (Clause [x])
+> cls2 (Neg (Prop x)) = (Clause [-x])
+> cls2 (Dsj fs) =   (Clause  [map cls2 fs])
+
+
+ cls (Cnj [f1, f2]) = cls f1 ++ cls f2
+ cls (Dsj [f1, f2]) =   [Clause [head $ read $ show (cls f1 ++ cls f2)]]
+ 
+ 
+ cls (Cnj [f1,f2]) = cls f1 ++ cls f2
+ 
+
+ cls (Dsj fs) = Clause [concat $ head (map cls fs)]
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Examples from lab desc.
 
@@ -81,3 +131,5 @@ Examples from lab desc.
 
 > getLiterals :: [Int]
 > getLiterals = [1,2,3,4]
+
+Time spent attempting to complete the exercise: at least two hours.

@@ -92,6 +92,13 @@ Auto test CNF conversion 1000 times with moderate complexity (maxSize 30)
 
 Properties
 
+
+Check if a formula is a tautology
+
+> prop_tautology :: Form -> Bool
+> prop_tautology f = all (\x -> evl x f) (allVals f)
+
+
 Check if form contains no Impl or Equiv.
 
 > prop_arrowfree :: Form -> Bool
