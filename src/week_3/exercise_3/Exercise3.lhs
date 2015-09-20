@@ -13,6 +13,8 @@ Time spent: 2 hours
 > toCnf :: Form -> Form
 > toCnf = simplify . cnf . nnf . arrowfree
 
+Assumes that formula is arrowfree and nnf
+
 > cnf :: Form -> Form
 > cnf (Prop p) = Prop p
 > cnf (Neg (Prop p)) = Neg (Prop p)
@@ -34,7 +36,7 @@ This function uses the distribution law to distribute conjunctions over disjunct
 > distCnjOverDsj f1 (Cnj (f2:fs)) = Cnj [distCnjOverDsj f1 f2, distCnjOverDsj f1 (Cnj fs)]
 > distCnjOverDsj f1 f2 = Dsj [f1,f2]
 
-This is used to simplify the end result by rewriting conjunctions of conjunctions and disjunctions of disjunctions(also removes duplicates)
+This is used to simplify the end result by rewriting conjunctions of conjunctions and disjunctions of disjunctions(also removes duplicates). Assummes that formula is in cnf
 
 > simplify :: Form -> Form
 > simplify (Dsj fs) =  Dsj (nub $ flattenDsj fs)
@@ -48,14 +50,16 @@ Homemade nub used in simplify
 > nub [] = []
 > nub (x:xs) = x : nub (filter (/= x) xs)
 
-Rewrites conjunctions of conjunctions into one 
+
+Rewrites disjunctions of disjunctions into one
 
 > flattenDsj :: [Form] -> [Form]
 > flattenDsj [] = []
 > flattenDsj ((Dsj fs):gs) = flattenDsj (fs ++ gs)
 > flattenDsj (f:fs) = f: flattenDsj fs
 
-Rewrites disjunctions of disjunctions into one
+
+Rewrites conjunctions of conjunctions into one 
 
 > flattenCnj :: [Form] -> [Form] 
 > flattenCnj [] = []
