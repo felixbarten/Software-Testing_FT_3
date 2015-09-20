@@ -305,7 +305,7 @@ The Boolean conditions of any imperative programming language are in fact statem
 
 Here is a datatype for propositional formulas:
 
-> type Name = Char
+> type Name = Int
 
 > data Form = Prop Name
 >           | Neg  Form
@@ -335,15 +335,17 @@ This time, we define our own show function for formulas:
 
 Example Formulas:
 
-> p = Prop 'b'
-> q = Prop 'a'
- 
+> p = Prop 1
+> q = Prop 2
+> r = Prop 3 
+> 
 > form1 = Equiv (Impl p q) (Impl (Neg q) (Neg p))
 > form2 = Equiv (Impl p q) (Impl (Neg p) (Neg q))
-
+> form3 = Impl (Cnj [Impl p q, Impl q r]) (Impl p r)
 > form4 = Cnj [Impl p q, (Impl (Neg q) (Neg p))]
 > form5 = Neg(Neg(Neg p))
 > form6 = Neg(Cnj[Neg(q),Neg(p)])
+
 
 Proposition Letters Occurring in a Formula
 
@@ -426,7 +428,7 @@ The process of converting an input string to a list of tokens is called lexical 
 >       | TokenDsj
 >       | TokenImpl
 >       | TokenEquiv 
->       | TokenInt Char
+>       | TokenInt Int 
 >       | TokenOP
 >       | TokenCP
 >  deriving (Show,Eq)
