@@ -41,5 +41,5 @@ This declaration was taken form exercise 3
 > prop_cnf_equivalence f = let r = cnf f
 >                          in equiv f r
 
-> test = quickCheckWith stdArgs {maxSize = 10}  
+> test = verboseCheckWith stdArgs {maxSize = 10}  
 > testToCnf = test prop_cnf_equivalence
