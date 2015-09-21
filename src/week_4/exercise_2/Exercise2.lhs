@@ -8,8 +8,11 @@
 > import Test.QuickCheck
 > import Control.Monad
 
-Mine
-====
+Report
+=====
+_Time Spent_: 1.5 hours
+
+*Mine*
 
 > newtype SetInt  = SetInt ( Set Int ) deriving (Eq,Ord)
 
@@ -27,8 +30,7 @@ Mine
 >                   return (x:xs)
 
 
-QuickCheck
-====
+*QuickCheck*
 
 > instance Arbitrary (Set Int) where
 >    arbitrary = liftM list2set arbitrary
