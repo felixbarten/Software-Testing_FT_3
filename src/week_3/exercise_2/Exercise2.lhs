@@ -9,6 +9,7 @@ Testing module for Lecture3 Parse merthod
 > instance Arbitrary Form where
 >   arbitrary   = sized form
 
+
 > form :: Int -> Gen Form 
 > form 0 = do
 >       x <- choose(1,10) :: Gen Int 
