@@ -1,2 +1,2 @@
-> module Exercise1 where
+> module Exercise3 where
 
