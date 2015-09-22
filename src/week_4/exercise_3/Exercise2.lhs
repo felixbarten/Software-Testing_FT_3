@@ -15,9 +15,9 @@ Generates a random set with a length between zero and fifty
 > genSets :: IO (Set Int)
 > genSets =  do 
 >              seed <-getStdGen
->              length <-getStdRandom(randomR(0,50))
+>              length <-getStdRandom(randomR(0,1000))
 >              let rlist = take length $ (randoms seed :: [Int])
->              let set = Set rlist
+>              let set = list2set rlist
 >              return $ set
 
 

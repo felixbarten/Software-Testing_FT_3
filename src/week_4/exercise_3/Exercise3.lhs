@@ -69,3 +69,46 @@ Testing properties
 > prop_intersect_as_diff :: Set Int -> Set Int -> Bool
 > prop_intersect_as_diff a b = intersectSet a b == differenceSet a (differenceSet a b) 
 
+Test manually
+
+> manual_test = testR 1 100 prop_intersect_as_diff 
+
+
+Generate two random sets and try to test these sets with a property
+
+> testR :: Int -> Int -> (Set Int -> Set Int -> Bool) -> IO ()
+> testR k n f = if k == n then print (show n ++ " tests passed")
+>                 else do
+>                   s1 <- genSets
+>                   s2 <- genSets
+>                   if f s1 s2 then
+>                     do print ("Expected result: " ++ show (f s1 s2))
+>                        testR (k+1) n f
+>                   else error ("Expected result: " ++ show (f s1 s2) ++ " => failed test on: " ++ show s1)
+
+
+Test automated
+
+> autoTest = quickCheck prop_intersect_as_diff
+
+Test Report
+
+*Exercise3> manual_test 
+......
+"Expected result: True"
+"Expected result: True"
+"Expected result: True"
+"100 tests passed"
+*Exercise3> 
+
+*Exercise3> quickCheckResult prop_intersect_as_diff 
++++ OK, passed 100 tests.
+Success {numTests = 100, labels = [], output = "+++ OK, passed 100 tests.\n"}
+*Exercise3> 
+
+Time spent: 1 hour
+
+
+
+
+
