@@ -14,7 +14,6 @@ _Time Spent_: 1.5 hours
 
 *Mine*
 
-> newtype SetInt  = SetInt ( Set Int ) deriving (Eq,Ord)
 
 > getRandomInt :: Int -> IO Int
 > getRandomInt n = getStdRandom (randomR (0,n))
