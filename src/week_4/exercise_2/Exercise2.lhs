@@ -19,7 +19,7 @@ let list = genIntList --> IO Int stupid...
 >              return (Set list)
 
 
-so far... 1.45hr...:@:@
+so far... 2hr...:@:@:@:@:@
 
 > instance Arbitrary (Set Int) where
 >    arbitrary = liftM list2set arbitrary
