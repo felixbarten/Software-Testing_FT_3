@@ -14,5 +14,4 @@ totalR
 
 pdf --> sel_192
 
-
 exerc_5.56
