@@ -19,14 +19,14 @@ evenNumbers (_:y:xs) = y : evenNumbers xs
 
 oddNumbers :: [Integer] -> [Integer]
 oddNumbers [] = [] 
-oddNumbers (x:xs) = if length xs >= 1 then  x : oddNumbers (drop 1 xs) else [x]
+oddNumbers (x:xs) = if not (null xs) then  x : oddNumbers (drop 1 xs) else [x]
 -- ^ possible errors with dropping elements from the list should be avoided with the length call. 
 
 calculateChecksum :: Integer -> Integer
 calculateChecksum n = sum ((oddNumbers . reverse . integerToList) n) + sumEvenNum (evenNumbers . reverse . integerToList $ n)
 
 sumEvenNum :: [Integer] -> Integer
-sumEvenNum xs = foldr (\ x -> (+) (sum (integerToList (x * 2)))) 0 xs
+sumEvenNum = foldr (\ x -> (+) (sum (integerToList (x * 2)))) 0
 
 luhnValid :: Integer -> Bool
 luhnValid n = rem (calculateChecksum n) 10 == 0

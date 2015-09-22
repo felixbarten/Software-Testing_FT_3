@@ -16,7 +16,7 @@ dropLastDigit x = x `div` 10
 -- Exercise 2 -----------------------------------------
 
 toRevDigits :: Integer -> [Integer]
-toRevDigits x = if x <= 0 then [] else  [lastDigit x] ++ toRevDigits(dropLastDigit x)
+toRevDigits x = if x <= 0 then [] else  lastDigit x : toRevDigits (dropLastDigit x)
 
 -- Exercise 3 -----------------------------------------
 
