@@ -1,9 +1,13 @@
+> {-# LANGUAGE FlexibleInstances #-} 
+
 > module Exercise2 where
 
 > import SetOrd
 > import System.Random
+> import Test.QuickCheck
+> import Control.Monad
 
-let list = genIntList
+let list = genIntList --> IO Int stupid...
 
 *** random data generator ***
 
@@ -15,4 +19,7 @@ let list = genIntList
 >              return (Set list)
 
 
-so far... 1.5hr...:@:@
+so far... 1.45hr...:@:@
+
+> instance Arbitrary (Set Int) where
+>    arbitrary = liftM list2set arbitrary
