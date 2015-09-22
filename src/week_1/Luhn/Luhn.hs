@@ -9,7 +9,7 @@ digits :: Integer -> [Integer]
 digits = map (read . return) . show
 
 integerToList ::  Integer -> [Integer]
-integerToList x = digits x
+integerToList = digits
 
 evenNumbers :: [Integer] -> [Integer]
 evenNumbers [] = [] 
