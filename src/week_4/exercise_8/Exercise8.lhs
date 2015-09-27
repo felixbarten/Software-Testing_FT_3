@@ -34,4 +34,9 @@ If we take the smallest set that didn't conform to the test we get [(0,1)]
 if the transitive closure from this relation is taken first and then the symmetric one it will result in this [(0,1),(1,0)]
 If these operations are done the other way around it's [(0,1),(0,0),(1,0),(1,1)] 
 
+If the symmetric closure is calculated before the transitive closure the relation will also become reflexive. 
+
 So the precedence of these closures definitely matters. 
+
+
+Time spent: 10 minutes
