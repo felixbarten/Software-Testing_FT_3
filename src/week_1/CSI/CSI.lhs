@@ -38,25 +38,25 @@ to give the list of guilty boys, plus the list of boys who made honest (true) st
 If the puzzle is well-designed, then guilty should give a singleton list.
 
 > says:: Boy -> Boy -> Bool
-> says Matthew x = not (x == Carl) && not (x == Matthew) 
-> says Arnold x = ((says Matthew x) || (says Peter x)) && not ((says Matthew x)  && (says Peter x)) 
-> says Carl x = not (says Arnold x)
+> says Matthew x = x /= Carl && x /= Matthew 
+> says Arnold x = (Matthew `says` x || Peter `says` x) && not ((Matthew `says` x)  && (Peter `says` x)) 
+> says Carl x = not (Arnold `says` x)
 > says Peter x = x == Matthew || x == Jack
-> says Jack x = not (says Matthew x) && not (says Peter x) 
+> says Jack x = not (Matthew `says` x) && not (Peter `says` x) 
  
 
 > accusers :: Boy -> [Boy]
-> accusers n = filter (\x -> says x n) boys
+> accusers n = filter (`says` n) boys
 
 Any boy who hasn't accused himself(contradiction) is probably honest
 
 > honest :: [Boy]
-> honest = map (fst) $ filter (\(x,y) -> notElem x y ) (map (\z -> (z, accusers z)) boys)
+> honest = map fst $ filter (uncurry notElem) (map (\z -> (z, accusers z)) boys)
 
 Three of the 5 boys always tell the truth so any person who is accused by more than 2 people(The amount of boys who always lie)
 must be guilty
 
 > guilty:: [Boy]
-> guilty = map (fst) (filter (\(x,y) -> length y > 2) (map (\y -> (y, accusers y)) boys))
+> guilty = map fst (filter (\(x,y) -> length y > 2) (map (\y -> (y, accusers y)) boys))
 
 
