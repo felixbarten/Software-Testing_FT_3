@@ -3,8 +3,6 @@
 > import Data.List
 > type Rel a = [(a,a)]
 
-Time spent: 1.5 hours
-
 > fix :: (a -> a) -> a
 > fix f = let x = f x in x
 
@@ -23,3 +21,5 @@ Transtivity = xRy ^ yRz => xRz
 
 > trClos :: Ord a => Rel a -> Rel a 
 > trClos r = fix (\f' x -> if transitive x then x else x ++ x @@ x) r
+
+Time spent: 1.5 hours

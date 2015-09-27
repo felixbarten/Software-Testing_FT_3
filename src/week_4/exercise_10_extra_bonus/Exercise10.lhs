@@ -85,5 +85,7 @@ We run the follow :
 > project_euler_20 = sumDigits $ toRevDigits $ factorial 100
 
         **** Outcome : 648 *******
+        
+Time spent: about 90 minutes on 7,8 and 12
 
         
