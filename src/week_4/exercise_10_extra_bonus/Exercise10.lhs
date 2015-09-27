@@ -46,24 +46,6 @@ Euler 12
 > getDivisors :: Integer -> Int
 > getDivisors n = length . filter (\x -> rem n x == 0) $[1..n]
 
+it's not a fast solution but it works
+
 > project_euler_12 = filter ((>500) . getDivisors) $ map (triangularTerms) [1..] 
-
-
-
-> primes' = 2 : filter (null . tail . primeFactors) [3,5..]
- 
-> primeFactors n = factor n primes'
->   where
->     factor n (p:ps) 
->         | p*p > n        = [n]
->         | n `mod` p == 0 = p : factor (n `div` p) (p:ps)
->         | otherwise      =     factor n ps
->  
-> problem_3 = last (primeFactors 600851475143)
-
-> problem_12 = head $ filter ((> 500) . nDivisors) triangleNumbers
->  where nDivisors n = product $ map ((+1) . length) (group (primeFactors n))    
->        triangleNumbers = scanl1 (+) [1..]
-
-
-foldr (\x acc -> if rem n x == 0 then x : acc else (acc)) [] [1..n]
