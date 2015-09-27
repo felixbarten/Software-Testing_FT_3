@@ -2,6 +2,7 @@
 
 ** Fuctions below were implemented for ass#1 **
 
+
 We run the follow :
 
 *Exercise10> sumDigits $ toRevDigits $ factorial 100
