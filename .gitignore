@@ -59,3 +59,7 @@ local.properties
 /.dist-buildwrapper/
 Setup.hs
 Software-Testing-ft3.cabal
+
+# IGNORE GEDIT AUTO SAVE
+.lhs~
+.hs~
