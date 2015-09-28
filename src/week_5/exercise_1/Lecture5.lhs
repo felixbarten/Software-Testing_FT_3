@@ -84,6 +84,9 @@ The specification in the previous section suggests the following declarations:
 > blocks :: [[Int]]
 > blocks = [[1..3],[4..6],[7..9]]
 
+> internalBlocks :: [[Int]]
+> internalBlocks = [[2..4],[6..8]]
+
 Showing Sudoku stuff: use 0 for a blank slot, so show 0 as a blank. Showing a value:
 
 > showVal :: Value -> String
@@ -289,10 +292,21 @@ Prune values that are no longer possible from constraint list, given a new guess
 >   | c == y = (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | sameblock (r,c) (x,y) = 
 >         (x,y,zs\\[v]) : prune (r,c,v) rest
+>   | sameInternalBlock (r,c) (x,y) = 
+>          (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | otherwise = (x,y,zs) : prune (r,c,v) rest
 > 
 > sameblock :: (Row,Column) -> (Row,Column) -> Bool
 > sameblock (r,c) (x,y) = bl r == bl x && bl c == bl y 
+
+
+
+
+> sameInternalBlock :: (Row,Column) -> (Row,Column) -> Bool
+> sameInternalBlock (r,c) (x,y) = internalbl r == internalbl x && internalbl c == internalbl y
+
+> internalbl :: Int -> [Int]
+> internalbl x = concat $ filter (elem x) internalBlocks 
 
 Initialisation
 
@@ -427,6 +441,17 @@ This uses some monad operators: fmap and sequence.
 > solveShowNs = sequence . fmap showNode . solveNs
 
 Examples
+
+> example0 :: Grid
+> example0 = 	[[0,0,0,3,0,0,0,0,0],
+>              	[0,0,0,7,0,0,3,0,0],
+>             	[2,0,0,0,0,0,0,0,8],
+>            	[0,0,6,0,0,5,0,0,0],
+>           	[0,9,1,6,0,0,0,0,0],
+>          	[3,0,0,0,7,1,2,0,0],
+>         	[0,0,0,0,0,0,0,3,1],
+>        	[0,8,0,0,4,0,0,0,0],
+>        	[0,0,2,0,0,0,0,0,0]]
 
 > example1 :: Grid
 > example1 = [[5,3,0,0,7,0,0,0,0],
