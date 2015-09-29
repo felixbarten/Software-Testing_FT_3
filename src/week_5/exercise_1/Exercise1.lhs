@@ -4,18 +4,8 @@
 > import Lecture5
 
 
-Define additional subgrids 
-
-2,2 2,6
-6,2 ,6,6
-
-probably new blocks function, and check injectivity for those, maybe possible to impl. in existing blocks function
-
-start with show?
-
-
-> exampl201 :: Grid
-> exampl201 = [[5,3,0,0,7,0,0,0,0],
+> example6 :: Grid
+> example6 = [[5,3,0,0,7,0,0,0,0],
 >             [6,0,0,1,9,5,0,0,0],
 >             [0,9,8,0,0,0,0,6,0],
 >             [8,0,0,0,6,0,0,0,3],
@@ -25,9 +15,22 @@ start with show?
 >             [0,0,0,4,1,9,0,0,5],
 >             [0,0,0,0,8,0,5,7,9]]
 
+NRC example:
 
-Showing a row by sending it to the screen; not the type IO() for the result:
+> exampleCons :: Grid
+> exampleCons = 
+>             [[0,0,0,3,0,0,0,0,0],
+>             [0,0,0,7,0,0,3,0,0],
+>             [2,0,0,0,0,0,0,0,8],
+>             [0,0,6,0,0,5,0,0,0],
+>             [0,9,1,6,0,0,0,0,0],
+>             [3,0,0,0,7,1,2,0,0],
+>             [0,0,0,0,0,0,0,3,1],
+>             [0,8,0,0,4,0,0,0,0],
+>             [0,0,2,0,0,0,0,0,0]]
 
+
+Desired NRC sudoku output:
              +---------+---------+---------+
              |         | 3       |         |
              |   +-----|--+   +--|-----+   |
@@ -47,23 +50,26 @@ Showing a row by sending it to the screen; not the type IO() for the result:
              +---------+---------+---------+
 
 
+Special row dividers for boundaries of sub grids.
+
 > showSubGridRow :: IO()
 > showSubGridRow = do putStr ("|   +-----|--+   +--|-----+   |")  ;putChar '\n';
 
+ShowRow function for showing values which are not in a internal block (row 1, 5 and 9)
 
 > showRow'' :: [Value] -> IO()
 > showRow'' [a1,a2,a3,a4,a5,a6,a7,a8,a9] = 
 >  do  putChar '|'         ; putChar ' '
->      putStr (showVal a1) ; putChar ' '; putChar ' '; putChar ' '
->      putStr (showVal a2) ; putChar ' '
+>      putStr (showVal a1) ; putChar ' '; putChar ' '
+>      putStr (showVal a2) ; putChar ' '; putChar ' '
 >      putStr (showVal a3) ; putChar ' '
 >      putChar '|'         ; putChar ' '
 >      putStr (showVal a4) ; putChar ' '; putChar ' '
 >      putStr (showVal a5) ; putChar ' '; putChar ' '
 >      putStr (showVal a6) ; putChar ' '
 >      putChar '|'         ; putChar ' '
->      putStr (showVal a7) ; putChar ' '
->      putStr (showVal a8) ; putChar ' '; putChar ' '; putChar ' '
+>      putStr (showVal a7) ; putChar ' '; putChar ' '
+>      putStr (showVal a8) ; putChar ' '; putChar ' '
 >      putStr (showVal a9) ; putChar ' '
 >      putChar '|'         ; putChar '\n'
 
@@ -72,8 +78,8 @@ Showing a row by sending it to the screen; not the type IO() for the result:
 > showRow' [a1,a2,a3,a4,a5,a6,a7,a8,a9] = 
 >  do  putChar '|'         ; putChar ' '
 >      putStr (showVal a1) ; putChar ' '
->      putChar '|'         ; putChar ' '
->      putStr (showVal a2) ; putChar ' '
+>      putChar '|'         ;
+>      putStr (showVal a2) ; putChar ' '; putChar ' '
 >      putStr (showVal a3) ; putChar ' '
 >      putChar '|'         ; putChar ' '
 >      putStr (showVal a4) ;
@@ -82,8 +88,8 @@ Showing a row by sending it to the screen; not the type IO() for the result:
 >      putChar '|'         ;
 >      putStr (showVal a6) ; putChar ' '
 >      putChar '|'         ; putChar ' '
->      putStr (showVal a7) ; putChar ' '
->      putStr (showVal a8) ; putChar ' '
+>      putStr (showVal a7) ; putChar ' '; putChar ' '
+>      putStr (showVal a8) ;
 >      putChar '|'         ; putChar ' '
 >      putStr (showVal a9) ; putChar ' '
 >      putChar '|'         ; putChar '\n'
@@ -121,8 +127,66 @@ Plug new show function in existing generator...
 
 adapted main for NRC 
 
+It is not recommended to try the main' function! 
+It is likely to generate a problem that doesn't adhere to the new constraints and therefore will never be solved 
+
 > main' :: IO ()
 > main' = do [r] <- rsolveNs [emptyN]
 >            showNode' r
 >            s  <- genProblem r
 >            showNode' s
+
+
+
+New consistancy func for NRC sudoku
+
+> consistent' :: Sudoku -> Bool
+> consistent' s = and $
+>                [ rowInjective s r |  r <- positions ]
+>                 ++
+>                [ colInjective s c |  c <- positions ]
+>                 ++
+>                [ subgridInjective s (r,c) | 
+>                     r <- [1,4,7], c <- [1,4,7]]
+>                ++
+>                [ subgridInjective s (r,c) | 
+>                     r <- [2,6], c <- [2,6]]
+
+A problem with the new blocks is that they are inside the existing blocks so they need to be able to be detected as such. 
+Otherwise a possible solution might be rejected 
+
+Solving and showing the results with new functions
+
+> solveAndShow' :: Grid -> IO[()]
+> solveAndShow' gr = solveShowNs' (initNode' gr)
+> 
+> solveShowNs' :: [Node] -> IO[()]
+> solveShowNs' = sequence . fmap showNode' . solveNs
+
+
+> initNode' :: Grid -> [Node]
+> initNode' gr = let s = grid2sud gr in 
+>               if (not . consistent') s then [] 
+>               else [(s, constraints s)]
+
+How to use: 
+
+*Exercise1> solveAndShow' exampleCons 
++---------+---------+---------+
+| 4   7 8 | 3  9  2 | 6 1   5 |
+|   +-----|--+   +--|-----+   |
+| 6 | 1 9 | 7| 5 |8 | 3 2 | 4 |
+| 2 | 3 5 | 4| 1 |6 | 9 7 | 8 |
++---------+---------+---------+
+| 7 | 2 6 | 8| 3 |5 | 1 4 | 9 |
+|   +-----|--+   +--|-----+   |
+| 8   9 1 | 6  2  4 | 7 5   3 |
+|   +-----|--+   +--|-----+   |
+| 3 | 5 4 | 9| 7 |1 | 2 8 | 6 |
++---------+---------+---------+
+| 5 | 6 7 | 2| 8 |9 | 4 3 | 1 |
+| 9 | 8 3 | 1| 4 |7 | 5 6 | 2 |
+|   +-----|--+   +--|-----+   |
+| 1   4 2 | 5  6  3 | 8 9   7 |
++---------+---------+---------+
+[()]

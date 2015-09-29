@@ -84,6 +84,10 @@ The specification in the previous section suggests the following declarations:
 > blocks :: [[Int]]
 > blocks = [[1..3],[4..6],[7..9]]
 
+
+> internalblocks :: [[Int]]
+> internalblocks = [[2..4],[6..8]]
+
 Showing Sudoku stuff: use 0 for a blank slot, so show 0 as a blank. Showing a value:
 
 > showVal :: Value -> String
@@ -149,6 +153,11 @@ Picking the block of a position
 
 > bl :: Int -> [Int]
 > bl x = concat $ filter (elem x) blocks 
+
+Picking the internal block of a position
+
+> iBl :: Int -> [Int]
+> iBl x = concat $ filter (elem x) internalblocks 
 
 Picking the subgrid of a position in a Sudoku.
 
@@ -289,10 +298,18 @@ Prune values that are no longer possible from constraint list, given a new guess
 >   | c == y = (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | sameblock (r,c) (x,y) = 
 >         (x,y,zs\\[v]) : prune (r,c,v) rest
+>   | sameIntBlock (r,c) (x,y)  = 
+>         (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | otherwise = (x,y,zs) : prune (r,c,v) rest
 > 
 > sameblock :: (Row,Column) -> (Row,Column) -> Bool
 > sameblock (r,c) (x,y) = bl r == bl x && bl c == bl y 
+
+check internal blocks.
+
+> sameIntBlock :: (Row,Column) -> (Row,Column) -> Bool
+> sameIntBlock (r,c) (x,y) = iBl r == iBl x && iBl c == iBl y 
+
 
 Initialisation
 
