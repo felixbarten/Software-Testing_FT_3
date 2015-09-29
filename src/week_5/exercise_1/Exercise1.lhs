@@ -108,3 +108,21 @@ Showing a grid, i.e., a sequence of rows.
 >     showSubGridRow; 
 >     showRow'' is
 >     putStrLn ("+---------+---------+---------+")
+
+
+Plug new show function in existing generator...
+
+> showNode' :: Node -> IO()
+> showNode' = showSudoku' . fst
+
+
+> showSudoku' :: Sudoku -> IO()
+> showSudoku' = showGrid' . sud2grid
+
+adapted main for NRC 
+
+> main' :: IO ()
+> main' = do [r] <- rsolveNs [emptyN]
+>            showNode' r
+>            s  <- genProblem r
+>            showNode' s

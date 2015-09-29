@@ -508,13 +508,16 @@ Randomize a list.
 >                     else do ys <- randomize (xs\\y)
 >                             return (head y:ys)
 
+
 > sameLen :: Constraint -> Constraint -> Bool
 > sameLen (_,_,xs) (_,_,ys) = length xs == length ys
+
 
 > getRandomCnstr :: [Constraint] -> IO [Constraint]
 > getRandomCnstr cs = getRandomItem (f cs) 
 >   where f [] = []
 >         f (x:xs) = takeWhile (sameLen x) (x:xs)
+
 
 > rsuccNode :: Node -> IO [Node]
 > rsuccNode (s,cs) = do xs <- getRandomCnstr cs
@@ -527,6 +530,7 @@ Find a random solution.
 
 > rsolveNs :: [Node] -> IO [Node]
 > rsolveNs ns = rsearch rsuccNode solved (return ns)
+
 
 > rsearch :: (node -> IO [node]) 
 >             -> (node -> Bool) -> IO [node] -> IO [node]
@@ -545,11 +549,14 @@ Find a random solution.
 >                              rsearch 
 >                                succ goal (return $ tail xs)
 
+
 > genRandomSudoku :: IO Node
 > genRandomSudoku = do [r] <- rsolveNs [emptyN]
 >                      return r
 
+
 > randomS = genRandomSudoku >>= showNode
+
 
 > uniqueSol :: Node -> Bool
 > uniqueSol node = singleton (solveNs [node]) where 
@@ -577,14 +584,17 @@ Return a minimal node with a unique solution by erasing positions until the resu
 >                          | otherwise    = minimalize n  rcs
 >   where n' = eraseN n (r,c)
 
+
 > filledPositions :: Sudoku -> [(Row,Column)]
 > filledPositions s = [ (r,c) | r <- positions,  
 >                               c <- positions, s (r,c) /= 0 ]
+
 
 > genProblem :: Node -> IO Node
 > genProblem n = do ys <- randomize xs
 >                   return (minimalize n ys)
 >    where xs = filledPositions (fst n)
+
 
 > main :: IO ()
 > main = do [r] <- rsolveNs [emptyN]
