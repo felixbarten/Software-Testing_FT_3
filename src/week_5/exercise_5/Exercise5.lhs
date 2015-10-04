@@ -3,7 +3,7 @@
 > import Exercise1
 
 Modifications in lecture5.lhs file
-
+Supplied exercise 1 code for nice formatting.
 
 Output: 
 
@@ -43,3 +43,7 @@ Output:
 |         |         |         |
 +---------+---------+---------+
 *Exercise5 Data.List>
+
+
+
+Time spent 90 minutes
