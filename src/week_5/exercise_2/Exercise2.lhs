@@ -15,7 +15,7 @@ The results:
 - Old version : (0.07 secs, 12573320 bytes)  
 
 It appears that the new version out performed the old version by about 0.04 secs, although the test was not very extensive.
-The refactored version of the program seems to be more easily to extend to fit due to the eliminated redundancy in the consitency check 
+The refactored version of the program seems to be more easily to extend to fit due to the eliminated redundancy in the consistency check 
 and freeAtPos functions
 
 *Time spent: (GCD of 4 and 6) hours*
@@ -63,7 +63,7 @@ New Code
 
 
 -------------------------------------------------------
-Code belonging to the old republic
+Old Code
 ==================================
 
 
