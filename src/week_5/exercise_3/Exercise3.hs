@@ -62,16 +62,16 @@ Example: (1,3) -> 0. If we run solveAndShow example0 we get 11 diff solutions.
   main = do [r] <- rsolveNs [emptyN]
             showNode r
             s  <- genProblem r
-	--    showSudoku (fst s)
-	    showNode s
-	    if (checkMinimal s (filledPositions (fst s)))
-	--  if (checkMinimal s )
-		then putStrLn ("Generated sudoku is minimal")
-		else putStrLn ("Generated sudoku is not minimal")
+        --    showSudoku (fst s)
+            showNode s
+            if (checkMinimal s (filledPositions (fst s)))
+        --  if (checkMinimal s )
+                then putStrLn ("Generated sudoku is minimal")
+                else putStrLn ("Generated sudoku is not minimal")
 
   checkMinimal :: Node -> [(Row,Column)] -> Bool
   checkMinimal x [] = True
   checkMinimal x (y:ys) = if (not $ uniqueSol $ eraseN x y)
-				then checkMinimal x ys
-				else False
+                                then checkMinimal x ys
+                                else False
 
