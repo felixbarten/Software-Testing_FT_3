@@ -84,6 +84,10 @@ The specification in the previous section suggests the following declarations:
 > blocks :: [[Int]]
 > blocks = [[1..3],[4..6],[7..9]]
 
+
+> internalblocks :: [[Int]]
+> internalblocks = [[2..4],[6..8]]
+
 Showing Sudoku stuff: use 0 for a blank slot, so show 0 as a blank. Showing a value:
 
 > showVal :: Value -> String
@@ -150,11 +154,23 @@ Picking the block of a position
 > bl :: Int -> [Int]
 > bl x = concat $ filter (elem x) blocks 
 
+Picking the internal block of a position
+
+> iBl :: Int -> [Int]
+> iBl x = concat $ filter (elem x) internalblocks 
+
 Picking the subgrid of a position in a Sudoku.
 
 > subGrid :: Sudoku -> (Row,Column) -> [Value]
 > subGrid s (r,c) = 
 >   [ s (r',c') | r' <- bl r, c' <- bl c ]
+
+
+Picking the subgrid of a position in a Sudoku.
+
+> subBlock :: Sudoku -> (Row,Column) -> [Value]
+> subBlock s (r,c) = 
+>   [ s (r',c') | r' <- iBl r, c' <- iBl c ]
 
 Free Values
 
@@ -180,6 +196,12 @@ And for free in a subgrid.
 > freeInSubgrid :: Sudoku -> (Row,Column) -> [Value]
 > freeInSubgrid s (r,c) = freeInSeq (subGrid s (r,c))
 
+
+and for free in intblock if its in there
+
+> freeInIntBlock :: Sudoku -> (Row,Column) -> [Value]
+> freeInIntBlock s (r,c) = freeInSeq (subBlock s (r,c))
+
 The key notion
 
 The available values at a position are the values that are free in the row of that position, free in the column of that position, and free in the subgrid of that position.
@@ -189,6 +211,7 @@ The available values at a position are the values that are free in the row of th
 >   (freeInRow s r) 
 >    `intersect` (freeInColumn s c) 
 >    `intersect` (freeInSubgrid s (r,c)) 
+>    `intersect` (freeInIntBlock s (r,c)) 
 
 Injectivity
 
@@ -231,6 +254,7 @@ Consistency Check Combine the injectivity checks defined above.
 Sudoku Extension
 
 Extend a Sudoku by filling in a value in a new position.
+
 
 > extend :: Sudoku -> ((Row,Column),Value) -> Sudoku
 > extend = update
@@ -289,10 +313,18 @@ Prune values that are no longer possible from constraint list, given a new guess
 >   | c == y = (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | sameblock (r,c) (x,y) = 
 >         (x,y,zs\\[v]) : prune (r,c,v) rest
+>   | sameIntBlock (r,c) (x,y)  = 
+>         (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | otherwise = (x,y,zs) : prune (r,c,v) rest
 > 
 > sameblock :: (Row,Column) -> (Row,Column) -> Bool
 > sameblock (r,c) (x,y) = bl r == bl x && bl c == bl y 
+
+check internal blocks.
+
+> sameIntBlock :: (Row,Column) -> (Row,Column) -> Bool
+> sameIntBlock (r,c) (x,y) = iBl r == iBl x && iBl c == iBl y 
+
 
 Initialisation
 
@@ -508,13 +540,17 @@ Randomize a list.
 >                     else do ys <- randomize (xs\\y)
 >                             return (head y:ys)
 
+
 > sameLen :: Constraint -> Constraint -> Bool
 > sameLen (_,_,xs) (_,_,ys) = length xs == length ys
+
 
 > getRandomCnstr :: [Constraint] -> IO [Constraint]
 > getRandomCnstr cs = getRandomItem (f cs) 
 >   where f [] = []
 >         f (x:xs) = takeWhile (sameLen x) (x:xs)
+
+
 > rsuccNode :: Node -> IO [Node]
 > rsuccNode (s,cs) = do xs <- getRandomCnstr cs
 >                       if null xs 
@@ -526,6 +562,7 @@ Find a random solution.
 
 > rsolveNs :: [Node] -> IO [Node]
 > rsolveNs ns = rsearch rsuccNode solved (return ns)
+
 
 > rsearch :: (node -> IO [node]) 
 >             -> (node -> Bool) -> IO [node] -> IO [node]
@@ -544,10 +581,15 @@ Find a random solution.
 >                              rsearch 
 >                                succ goal (return $ tail xs)
 
+
 > genRandomSudoku :: IO Node
 > genRandomSudoku = do [r] <- rsolveNs [emptyN]
 >                      return r
+
+
 > randomS = genRandomSudoku >>= showNode
+
+
 > uniqueSol :: Node -> Bool
 > uniqueSol node = singleton (solveNs [node]) where 
 >   singleton [] = False
@@ -573,13 +615,19 @@ Return a minimal node with a unique solution by erasing positions until the resu
 > minimalize n ((r,c):rcs) | uniqueSol n' = minimalize n' rcs
 >                          | otherwise    = minimalize n  rcs
 >   where n' = eraseN n (r,c)
+
+
 > filledPositions :: Sudoku -> [(Row,Column)]
 > filledPositions s = [ (r,c) | r <- positions,  
 >                               c <- positions, s (r,c) /= 0 ]
+
+
 > genProblem :: Node -> IO Node
 > genProblem n = do ys <- randomize xs
 >                   return (minimalize n ys)
 >    where xs = filledPositions (fst n)
+
+
 > main :: IO ()
 > main = do [r] <- rsolveNs [emptyN]
 >           showNode r
@@ -615,7 +663,6 @@ Example output from this:
     | 4 6   |       |       |
     |   5 8 | 7     |       |
     +-------+-------+-------+
-    
 Further Reading
 
 For further background, you might wish to read (Rosenhouse and Taalman 2011). Information about counting methods for Sudokus can be found in (Felgenhauer and Jarvis 2006) and (Russell and Jarvis 2006).

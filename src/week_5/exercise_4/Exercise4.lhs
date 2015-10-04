@@ -87,6 +87,8 @@ ignore 5 blocks
 >               showNode s
 
 
+Output from this :
+
 *Exercise4 Data.List> main' ignore3
 +-------+-------+-------+
 | 3 8 5 | 9 4 6 | 2 1 7 |
@@ -261,3 +263,5 @@ All 5 empty grid sudoku's of this variety returned the same sudoku after removin
 
 
 With the same outcome.
+
+Time spent: 2 hrs. 
