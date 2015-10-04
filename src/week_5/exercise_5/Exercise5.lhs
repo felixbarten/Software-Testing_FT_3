@@ -68,9 +68,6 @@ Code belonging to the old republic
 > blocks :: [[Int]]
 > blocks = [[1..3],[4..6],[7..9]]
 >
-> nrcBlocks :: [[Int]]
-> nrcBlocks =  [[2..4], [6..8]]
->
 > showVal :: Value -> String
 > showVal 0 = " "
 > showVal d = show d
@@ -119,15 +116,11 @@ Code belonging to the old republic
 > bl :: Int -> [Int]
 > bl x = concat $ filter (elem x) blocks 
 >
-> bl' x = concat $ filter (elem x) nrcBlocks 
 >
 > subGrid :: Sudoku -> (Row,Column) -> [Value]
 > subGrid s (r,c) = 
 >   [ s (r',c') | r' <- bl r, c' <- bl c ]
 >
-> nrcGrid :: Sudoku -> (Row,Column) -> [Value]
-> nrcGrid s (r,c) = 
->   [ s (r',c') | r' <- bl' r, c' <- bl' c ]
 >
 > freeInSeq :: [Value] -> [Value]
 > freeInSeq seq = values \\ seq 
@@ -143,8 +136,6 @@ Code belonging to the old republic
 > freeInSubgrid :: Sudoku -> (Row,Column) -> [Value]
 > freeInSubgrid s (r,c) = freeInSeq (subGrid s (r,c))
 >
-> freeInNrc :: Sudoku -> (Row,Column) -> [Value]
-> freeInNrc s (r,c) = freeInSeq (nrcGrid s (r,c))
 >
 >
 > injective :: Eq a => [a] -> Bool
@@ -162,9 +153,6 @@ Code belonging to the old republic
 > subgridInjective s (r,c) = injective vs where 
 >    vs = filter (/= 0) (subGrid s (r,c))
 >
-> nrcInjective :: Sudoku -> (Row,Column) -> Bool
-> nrcInjective s (r,c) = injective vs where 
->    vs = filter (/= 0) (nrcGrid s (r,c))
 >
 > extend :: Sudoku -> ((Row,Column),Value) -> Sudoku
 > extend = update
@@ -193,7 +181,6 @@ Code belonging to the old republic
 >
 > sameblock :: (Row,Column) -> (Row,Column) -> Bool
 > sameblock (r,c) (x,y) = bl r == bl x && bl c == bl y 
-> sameNrcBlock (r,c) (x,y) = bl' r == bl' x && bl' c == bl' y 
 
 > initNode :: Grid -> [Node]
 > initNode gr = let s = grid2sud gr in 
