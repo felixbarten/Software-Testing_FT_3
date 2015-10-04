@@ -507,8 +507,10 @@ Randomize a list.
 >                     then return []
 >                     else do ys <- randomize (xs\\y)
 >                             return (head y:ys)
+
 > sameLen :: Constraint -> Constraint -> Bool
 > sameLen (_,_,xs) (_,_,ys) = length xs == length ys
+
 > getRandomCnstr :: [Constraint] -> IO [Constraint]
 > getRandomCnstr cs = getRandomItem (f cs) 
 >   where f [] = []
