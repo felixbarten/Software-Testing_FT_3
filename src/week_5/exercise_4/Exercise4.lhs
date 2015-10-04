@@ -17,7 +17,7 @@ ignore top 3 blocks
    |   |
    
 > ignoretop3Blocks :: [(Row, Column)]
-> ignoretop3Blocks = [(r,c)| r <- [1..3], c <-[1..3]]
+> ignoretop3Blocks = [(r,c)| r <- [1..3], c <-[1..9]]
 
 
 ignore  3 blocks
