@@ -51,6 +51,10 @@ Output from code:
 "Average regular hints: 25 Average NRC hints: 16.7"
 *Exercise7>
 
+*Exercise7> avgHints 30
+"Average regular hints: 24.4 Average NRC hints: 17.0"
+*Exercise7>
+
 Unfortunately my implementation of 5 is not really fast so the computation of the averages takes a while. Therefore the sample size is kept small (10)
 
 Time spent: 1 hour
