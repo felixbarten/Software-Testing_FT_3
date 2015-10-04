@@ -135,7 +135,7 @@ Useful conversions:
 > grid2sud :: Grid -> Sudoku
 > grid2sud gr = \ (r,c) -> pos gr (r,c) 
 >   where 
->   pos :: [[a]] -> Position -> a 
+>   pos :: [[a]] -> (Row,Column) -> a 
 >   pos gr (r,c) = (gr !! (r-1)) !! (c-1)
 
 Showing a Sudoku
@@ -152,7 +152,7 @@ Picking the block of a position
 
 Picking the subgrid of a position in a Sudoku.
 
-> subGrid :: Sudoku -> Position -> [Value]
+> subGrid :: Sudoku -> (Row,Column) -> [Value]
 > subGrid s (r,c) = 
 >   [ s (r',c') | r' <- bl r, c' <- bl c ]
 
@@ -177,14 +177,14 @@ Similarly for free in a column.
 
 And for free in a subgrid.
 
-> freeInSubgrid :: Sudoku -> Position -> [Value]
+> freeInSubgrid :: Sudoku -> (Row,Column) -> [Value]
 > freeInSubgrid s (r,c) = freeInSeq (subGrid s (r,c))
 
 The key notion
 
 The available values at a position are the values that are free in the row of that position, free in the column of that position, and free in the subgrid of that position.
 
-> freeAtPos :: Sudoku -> Position -> [Value]
+> freeAtPos :: Sudoku -> (Row,Column) -> [Value]
 > freeAtPos s (r,c) = 
 >   (freeInRow s r) 
 >    `intersect` (freeInColumn s c) 
@@ -213,7 +213,7 @@ Check (the non-zero values on) the columns for injectivity.
 
 Check (the non-zero values on) the subgrids for injectivity.
 
-> subgridInjective :: Sudoku -> Position -> Bool
+> subgridInjective :: Sudoku -> (Row,Column) -> Bool
 > subgridInjective s (r,c) = injective vs where 
 >    vs = filter (/= 0) (subGrid s (r,c))
 
@@ -232,7 +232,7 @@ Sudoku Extension
 
 Extend a Sudoku by filling in a value in a new position.
 
-> extend :: Sudoku -> (Position,Value) -> Sudoku
+> extend :: Sudoku -> ((Row,Column),Value) -> Sudoku
 > extend = update
 
 Our well-known update function:
@@ -291,7 +291,7 @@ Prune values that are no longer possible from constraint list, given a new guess
 >         (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | otherwise = (x,y,zs) : prune (r,c,v) rest
 > 
-> sameblock :: Position -> Position -> Bool
+> sameblock :: (Row,Column) -> (Row,Column) -> Bool
 > sameblock (r,c) (x,y) = bl r == bl x && bl c == bl y 
 
 Initialisation
@@ -305,7 +305,7 @@ Success is indicated by return of a unit node [n].
 
 The open positions of a Sudoku are the positions with value 0.
 
-> openPositions :: Sudoku -> [Position]
+> openPositions :: Sudoku -> [(Row,Column)]
 > openPositions s = [ (r,c) | r <- positions,  
 >                             c <- positions, 
 >                             s (r,c) == 0 ]
@@ -438,7 +438,6 @@ Examples
 >             [0,6,0,0,0,0,2,8,0],
 >             [0,0,0,4,1,9,0,0,5],
 >             [0,0,0,0,8,0,0,7,9]]
-
 > example2 :: Grid
 > example2 = [[0,3,0,0,7,0,0,0,0],
 >             [6,0,0,1,9,5,0,0,0],
@@ -449,7 +448,6 @@ Examples
 >             [0,6,0,0,0,0,2,8,0],
 >             [0,0,0,4,1,9,0,0,5],
 >             [0,0,0,0,8,0,0,7,9]]
-
 > example3 :: Grid
 > example3 = [[1,0,0,0,3,0,5,0,4],
 >             [0,0,0,0,0,0,0,0,3],
@@ -460,7 +458,6 @@ Examples
 >             [0,5,1,4,7,0,0,0,0],
 >             [0,0,0,3,0,0,0,0,0],
 >             [0,4,0,0,0,9,7,0,0]]
-
 > example4 :: Grid
 > example4 = [[1,2,3,4,5,6,7,8,9],
 >             [2,0,0,0,0,0,0,0,0],
@@ -471,7 +468,6 @@ Examples
 >             [7,0,0,0,0,0,0,0,0],
 >             [8,0,0,0,0,0,0,0,0],
 >             [9,0,0,0,0,0,0,0,0]]
-
 > example5 :: Grid
 > example5 = [[1,0,0,0,0,0,0,0,0],
 >             [0,2,0,0,0,0,0,0,0],
@@ -511,17 +507,12 @@ Randomize a list.
 >                     then return []
 >                     else do ys <- randomize (xs\\y)
 >                             return (head y:ys)
-
-
 > sameLen :: Constraint -> Constraint -> Bool
 > sameLen (_,_,xs) (_,_,ys) = length xs == length ys
-
-
 > getRandomCnstr :: [Constraint] -> IO [Constraint]
 > getRandomCnstr cs = getRandomItem (f cs) 
 >   where f [] = []
 >         f (x:xs) = takeWhile (sameLen x) (x:xs)
-
 > rsuccNode :: Node -> IO [Node]
 > rsuccNode (s,cs) = do xs <- getRandomCnstr cs
 >                       if null xs 
@@ -533,7 +524,6 @@ Find a random solution.
 
 > rsolveNs :: [Node] -> IO [Node]
 > rsolveNs ns = rsearch rsuccNode solved (return ns)
-
 > rsearch :: (node -> IO [node]) 
 >             -> (node -> Bool) -> IO [node] -> IO [node]
 > rsearch succ goal ionodes = 
@@ -550,13 +540,10 @@ Find a random solution.
 >                            else 
 >                              rsearch 
 >                                succ goal (return $ tail xs)
-
 > genRandomSudoku :: IO Node
 > genRandomSudoku = do [r] <- rsolveNs [emptyN]
 >                      return r
-
 > randomS = genRandomSudoku >>= showNode
-
 > uniqueSol :: Node -> Bool
 > uniqueSol node = singleton (solveNs [node]) where 
 >   singleton [] = False
@@ -565,36 +552,30 @@ Find a random solution.
 
 Erase a position from a Sudoku.
 
-> eraseS :: Sudoku -> Position -> Sudoku
+> eraseS :: Sudoku -> (Row,Column) -> Sudoku
 > eraseS s (r,c) (x,y) | (r,c) == (x,y) = 0
 >                      | otherwise      = s (x,y)
 
 Erase a position from a Node.
 
-> eraseN :: Node -> Position -> Node
+> eraseN :: Node -> (Row,Column) -> Node
 > eraseN n (r,c) = (s, constraints s) 
 >   where s = eraseS (fst n) (r,c) 
 
 Return a minimal node with a unique solution by erasing positions until the result becomes ambiguous.
 
-> minimalize :: Node -> [Position] -> Node
+> minimalize :: Node -> [(Row,Column)] -> Node
 > minimalize n [] = n
 > minimalize n ((r,c):rcs) | uniqueSol n' = minimalize n' rcs
 >                          | otherwise    = minimalize n  rcs
 >   where n' = eraseN n (r,c)
-
-
-> filledPositions :: Sudoku -> [Position]
+> filledPositions :: Sudoku -> [(Row,Column)]
 > filledPositions s = [ (r,c) | r <- positions,  
 >                               c <- positions, s (r,c) /= 0 ]
-
-
 > genProblem :: Node -> IO Node
 > genProblem n = do ys <- randomize xs
 >                   return (minimalize n ys)
 >    where xs = filledPositions (fst n)
-
-
 > main :: IO ()
 > main = do [r] <- rsolveNs [emptyN]
 >           showNode r
@@ -630,6 +611,7 @@ Example output from this:
     | 4 6   |       |       |
     |   5 8 | 7     |       |
     +-------+-------+-------+
+    
 Further Reading
 
 For further background, you might wish to read (Rosenhouse and Taalman 2011). Information about counting methods for Sudokus can be found in (Felgenhauer and Jarvis 2006) and (Russell and Jarvis 2006).
@@ -655,14 +637,3 @@ Felgenhauer, Bertram, and Frazer Jarvis. 2006. “Mathematics of Sudoku I.”
 Rosenhouse, Jason, and Laura Taalman. 2011. Taking Sudoku Seriously: The Math Behind the World’s Most Popular Pencil Puzzle. Oxford University Press.
 
 Russell, Ed, and Frazer Jarvis. 2006. “Mathematics of Sudoku II.”
-
-
-> type Position = (Row,Column)
-> type Constrnt = [[Position]]
-
-
-> freeAtPos' :: Sudoku -> Position -> Constrnt -> [Value]
-> freeAtPos' s (r,c) xs = let 
->    ys = filter (elem (r,c)) xs 
->  in 
->    foldl1 intersect (map ((values \\) . map s) ys)

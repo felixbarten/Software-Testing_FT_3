@@ -25,3 +25,9 @@ New Style constraints
 >    ys = filter (elem (r,c)) xs 
 >  in 
 >    foldl1 intersect (map ((values \\) . map s) ys)
+
+
+
+Couldn't complete....
+
+Time spent: Longer than I'm willing to admit... about 10 hours.
