@@ -84,10 +84,6 @@ The specification in the previous section suggests the following declarations:
 > blocks :: [[Int]]
 > blocks = [[1..3],[4..6],[7..9]]
 
-
-> internalblocks :: [[Int]]
-> internalblocks = [[2..4],[6..8]]
-
 Showing Sudoku stuff: use 0 for a blank slot, so show 0 as a blank. Showing a value:
 
 > showVal :: Value -> String
@@ -153,11 +149,6 @@ Picking the block of a position
 
 > bl :: Int -> [Int]
 > bl x = concat $ filter (elem x) blocks 
-
-Picking the internal block of a position
-
-> iBl :: Int -> [Int]
-> iBl x = concat $ filter (elem x) internalblocks 
 
 Picking the subgrid of a position in a Sudoku.
 
@@ -298,18 +289,10 @@ Prune values that are no longer possible from constraint list, given a new guess
 >   | c == y = (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | sameblock (r,c) (x,y) = 
 >         (x,y,zs\\[v]) : prune (r,c,v) rest
->   | sameIntBlock (r,c) (x,y)  = 
->         (x,y,zs\\[v]) : prune (r,c,v) rest
 >   | otherwise = (x,y,zs) : prune (r,c,v) rest
 > 
 > sameblock :: (Row,Column) -> (Row,Column) -> Bool
 > sameblock (r,c) (x,y) = bl r == bl x && bl c == bl y 
-
-check internal blocks.
-
-> sameIntBlock :: (Row,Column) -> (Row,Column) -> Bool
-> sameIntBlock (r,c) (x,y) = iBl r == iBl x && iBl c == iBl y 
-
 
 Initialisation
 
@@ -525,16 +508,13 @@ Randomize a list.
 >                     else do ys <- randomize (xs\\y)
 >                             return (head y:ys)
 
-
 > sameLen :: Constraint -> Constraint -> Bool
 > sameLen (_,_,xs) (_,_,ys) = length xs == length ys
-
 
 > getRandomCnstr :: [Constraint] -> IO [Constraint]
 > getRandomCnstr cs = getRandomItem (f cs) 
 >   where f [] = []
 >         f (x:xs) = takeWhile (sameLen x) (x:xs)
-
 
 > rsuccNode :: Node -> IO [Node]
 > rsuccNode (s,cs) = do xs <- getRandomCnstr cs
@@ -547,7 +527,6 @@ Find a random solution.
 
 > rsolveNs :: [Node] -> IO [Node]
 > rsolveNs ns = rsearch rsuccNode solved (return ns)
-
 
 > rsearch :: (node -> IO [node]) 
 >             -> (node -> Bool) -> IO [node] -> IO [node]
@@ -566,14 +545,11 @@ Find a random solution.
 >                              rsearch 
 >                                succ goal (return $ tail xs)
 
-
 > genRandomSudoku :: IO Node
 > genRandomSudoku = do [r] <- rsolveNs [emptyN]
 >                      return r
 
-
 > randomS = genRandomSudoku >>= showNode
-
 
 > uniqueSol :: Node -> Bool
 > uniqueSol node = singleton (solveNs [node]) where 
@@ -601,11 +577,9 @@ Return a minimal node with a unique solution by erasing positions until the resu
 >                          | otherwise    = minimalize n  rcs
 >   where n' = eraseN n (r,c)
 
-
 > filledPositions :: Sudoku -> [(Row,Column)]
 > filledPositions s = [ (r,c) | r <- positions,  
 >                               c <- positions, s (r,c) /= 0 ]
-
 
 > genProblem :: Node -> IO Node
 > genProblem n = do ys <- randomize xs
@@ -618,6 +592,7 @@ Return a minimal node with a unique solution by erasing positions until the resu
 >           showNode r
 >           s  <- genProblem r
 >           showNode s
+
 
 Example output from this:
 
@@ -648,6 +623,7 @@ Example output from this:
     | 4 6   |       |       |
     |   5 8 | 7     |       |
     +-------+-------+-------+
+    
 Further Reading
 
 For further background, you might wish to read (Rosenhouse and Taalman 2011). Information about counting methods for Sudokus can be found in (Felgenhauer and Jarvis 2006) and (Russell and Jarvis 2006).

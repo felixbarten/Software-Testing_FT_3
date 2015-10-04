@@ -1,7 +1,7 @@
 > module Exercise1 where
 
 
-> import Lecture5
+> import Nrc
 
 
 > example6 :: Grid

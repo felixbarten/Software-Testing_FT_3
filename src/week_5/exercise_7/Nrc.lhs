@@ -1,6 +1,6 @@
 Lecture 5: Sudoku Problem Solving and Problem Generation
 
-> module Lecture5
+> module Nrc
 > 
 > where 
 > 
@@ -165,6 +165,13 @@ Picking the subgrid of a position in a Sudoku.
 > subGrid s (r,c) = 
 >   [ s (r',c') | r' <- bl r, c' <- bl c ]
 
+
+Picking the subgrid of a position in a Sudoku.
+
+> subBlock :: Sudoku -> (Row,Column) -> [Value]
+> subBlock s (r,c) = 
+>   [ s (r',c') | r' <- iBl r, c' <- iBl c ]
+
 Free Values
 
 Free values are available values at open slot positions. Free in a sequence are all values that have not yet been used.
@@ -189,6 +196,12 @@ And for free in a subgrid.
 > freeInSubgrid :: Sudoku -> (Row,Column) -> [Value]
 > freeInSubgrid s (r,c) = freeInSeq (subGrid s (r,c))
 
+
+and for free in intblock if its in there
+
+> freeInIntBlock :: Sudoku -> (Row,Column) -> [Value]
+> freeInIntBlock s (r,c) = freeInSeq (subBlock s (r,c))
+
 The key notion
 
 The available values at a position are the values that are free in the row of that position, free in the column of that position, and free in the subgrid of that position.
@@ -198,6 +211,7 @@ The available values at a position are the values that are free in the row of th
 >   (freeInRow s r) 
 >    `intersect` (freeInColumn s c) 
 >    `intersect` (freeInSubgrid s (r,c)) 
+>    `intersect` (freeInIntBlock s (r,c)) 
 
 Injectivity
 
@@ -240,6 +254,7 @@ Consistency Check Combine the injectivity checks defined above.
 Sudoku Extension
 
 Extend a Sudoku by filling in a value in a new position.
+
 
 > extend :: Sudoku -> ((Row,Column),Value) -> Sudoku
 > extend = update
