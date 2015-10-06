@@ -12,6 +12,8 @@ Dependency on criterion benchmark framework
 cabal update
 cabal install -j --disable-tests criterion
 
+used version: 0.8.1.0
+
 
 > main = defaultMain [
 >   bgroup "Modular exponentiation" [ bench "expFast 123456789101112"  $ whnf  (expFast 4 123456789101112) 12
