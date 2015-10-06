@@ -1,11 +1,10 @@
 > module Exercise3 where
 
 
-Copied code from Lecture 6
 
 > isPrime n = factors n == [n]
-> primes = 2 : filter isPrime [3..]
 
+> primes = 2 : filter isPrime [3..]
 
 > factors :: Integer -> [Integer]
 > factors n = let 
@@ -18,7 +17,5 @@ Copied code from Lecture 6
 >     | otherwise      =    factors' n ps
 
 
-Composites list:
-
 > composites :: [Integer]
-> composites = filter (not.isPrime) [1..]
+> composites = filter (not.isPrime) [3..]

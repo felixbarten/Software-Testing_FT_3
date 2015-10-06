@@ -5,6 +5,9 @@
 > import qualified Lecture6
 > import Crypto.Number.ModArithmetic
 
+Dependency on cryptonite lib.
+
+
 Not that fast ;) 1.13 seconds with lecture code 0.72 with this code. 
 
 > exM :: Integer -> Integer -> Integer -> Integer
@@ -19,8 +22,6 @@ Even slower (without modding in between)
 
 A faster method would be to calculate x^y mod z with a power of 2 and then calculate the next one with precious results
 x^4 mod z =  x^2 mod z * x^2 mod z
-
-TODO implmenet the above ^
 
 Decimal to Binary format, courtesy of stackoverflow
 
