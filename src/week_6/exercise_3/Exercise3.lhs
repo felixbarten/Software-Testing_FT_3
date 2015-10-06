@@ -1,5 +1,5 @@
 > module Exercise3 where
-
+ 
 *** Time spent 5mins . . . ***
 
 > composites :: [Integer]
