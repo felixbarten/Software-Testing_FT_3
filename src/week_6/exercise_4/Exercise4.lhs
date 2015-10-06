@@ -4,14 +4,6 @@
 > import Control.Monad
 
 
-> testFermat k = filterM (\c -> tstFer k c) composites
-
- 
-> tstFer k n = do
->                result <- prime_tests_F k n
->                when (result) $ print ("True for composite " ++ show n ++ " and K: " ++ show k) 
->                return result
-
 > composites :: [Integer]
 > composites = filter composite [2..]
 
