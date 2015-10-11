@@ -3,6 +3,7 @@
 > import Lecture6
 > import Control.Monad
 > import Control.Applicative
+> import Control.Monad.State
 
 Report 
 ======
