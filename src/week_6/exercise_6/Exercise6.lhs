@@ -29,7 +29,7 @@
 
 output: 
 
-*Exercise6> testMillerRabin 1 carmichael 
+*Exercise6> testMR 1 carmichael 
 "True for composite 13079177569 and K: 1"
 "True for composite 1042789205881 and K: 1"
 "True for composite 1201586232601 and K: 1"
@@ -84,6 +84,8 @@ output:
 Still a lot of the carmichael numbers pass with k = 1 
 
 
-*Exercise6> testMillerRabin 10 carmichael 
+*Exercise6> testMR 10 carmichael 
 
  Nothing returned after some time 
+ 
+ It can be concluded that the Miller rabin primality check is more accurate than the fermat primality check. 

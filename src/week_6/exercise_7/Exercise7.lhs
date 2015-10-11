@@ -6,6 +6,7 @@
 
 Expects a list of primes
 
+> mersenne :: Int -> [Integer] -> IO()
 > mersenne k (p:ps) = do 
 >                      res <- primeMR k ((2^p)-1) 
 >                      when (res) $  print ("Prime: " ++ show p ++ " is a mersenne prime")
@@ -38,4 +39,6 @@ Output:
 ^CInterrupted.
 *Exercise7> 
 
+
+This implementation provides the  first 21 mersenne primes within a reasonable time. 
 

@@ -6,6 +6,9 @@
 > import System.Random
 > import Crypto.Number.ModArithmetic
 
+This solution requires the Crypto library found in cabal package "cryptonite"
+
+
 Abstract
 
 Fast modular arithmetic allows us to generate and recognize large primes efficiently, but we need the concept of a probabilistic algorithm.
