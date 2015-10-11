@@ -3,8 +3,8 @@
 
 > exM :: Integer -> Integer -> Integer -> Integer
 > exM b 0 m = 1
-> exM b e m = aux * exM ((b^2) `mod` m) (e `shiftR` 1) m `mod` m
->  		   where aux = if e `mod` 2 == 1 then b `mod` m else 1
+> exM b e m = t * exM ((b^2) `mod` m) (e `shiftR` 1) m `mod` m
+>  		   where t = if e `mod` 2 == 1 then b `mod` m else 1
   
 
 > expM ::  Integer -> Integer -> Integer -> Integer
