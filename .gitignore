@@ -63,3 +63,10 @@ Software-Testing-ft3.cabal
 # IGNORE GEDIT AUTO SAVE
 .lhs~
 .hs~
+
+
+# ignore mac files
+.DS_STORE
+
+# ignore intelij
+.idea
